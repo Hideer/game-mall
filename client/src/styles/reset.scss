@@ -1,0 +1,403 @@
+/**
+ * 浏览器默认样式重置 && 极高复用css（脱离业务）
+ *
+ * @Author: yu_meng_cheng@163.com
+ * @Date: 2019-09-30 23:43:03
+ * @Last Modified by: yu_meng_cheng@163.com
+ * @Last Modified time: 2019-11-16 00:53:00
+ */
+
+
+// 滚动条样式-重置 start
+body {
+  scrollbar-arrow-color: #187aff;
+  /*上下按钮上三角箭头的颜色*/
+  scrollbar-face-color: #cbcbcb;
+  /*滚动条凸出部分的颜色*/
+  scrollbar-3dlight-color: blue;
+  /*滚动条亮边的颜色*/
+  scrollbar-highlight-color: #fff;
+  /*滚动条空白部分的颜色*/
+  scrollbar-shadow-color: #999;
+  /*滚动条阴影的颜色*/
+  scrollbar-darkshadow-color: green;
+  /*滚动条强阴影的颜色*/
+  scrollbar-track-color: #eee;
+  /*滚动条背景颜色*/
+  scrollbar-base-color: #fff;
+  /*滚动条的基本颜色*/
+  /* Cursor: url(mouse.cur); */
+  /*自定义个性鼠标*/
+  /*以上2项适用与：body、div、textarea、iframe*/
+}
+
+::-webkit-scrollbar {
+  /* 滚动条整体部分 */
+  width: 6px;
+  margin-right: 2px;
+}
+
+::-webkit-scrollbar-button {
+  /* 滚动条两端的按钮 */
+  width: 6px;
+  margin-right: 2px;
+}
+
+::-webkit-scrollbar:horizontal {
+  height: 10px;
+  margin-bottom: 2px;
+}
+
+::-webkit-scrollbar-track {
+  /* 外层轨道 */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track-piece {
+  /*内层轨道，滚动条中间部分 */
+  background-color: transparent;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  /* 滑块 */
+  width: 6px;
+  border-radius: 10px;
+  background: #cbcbcb;
+}
+
+::-webkit-scrollbar-corner {
+  /* 边角 */
+  width: 6px;
+  background-color: #fff;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  /* 鼠标移入滑块 */
+  background: #909090;
+}
+// 滚动条样式-重置 end
+
+
+
+// 浏览器默认样式重置
+
+body {
+  height: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB,
+    Microsoft YaHei, Arial, sans-serif;
+  // font-family:PingFangSC-Regular;
+  font-size: 16px;
+  color: #333;
+
+  // select颜色
+  // ::selection {
+  //   background: #faad14;
+  //   color: #fff;
+  // }
+  // ::-moz-selection {
+  //   background: #faad14;
+  //   color: #fff;
+  // } /*火狐浏览器*/
+  // ::-webkit-selection {
+  //   background: #faad14;
+  //   color: #fff;
+  // } /*谷歌*/
+}
+
+html {
+  // height: 100%;
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+
+div:focus {
+  outline: none;
+}
+
+/* 按钮默认样式 */
+input,
+button,
+select,
+textarea {
+  outline: none;
+  /* -webkit-appearance: none; */
+  border-radius: 0;
+  padding: 0;
+  border: 0;
+}
+
+
+/* 清除内外边距 */
+body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, /* structural elements 结构元素 */
+dl, dt, dd, ul, ol, li, /* list elements 列表元素 */
+pre, /* text formatting elements 文本格式元素 */
+fieldset, lengend, button, input, textarea, /* form elements 表单元素 */
+th, td {
+  /* table elements 表格元素 */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+  word-break: break-all;
+  word-wrap: break-word;
+}
+
+h1 {
+  font-size: 18px; /* 18px / 12px = 1.5 */
+}
+h2 {
+  font-size: 16px;
+}
+h3 {
+  font-size: 14px;
+}
+h4,
+h5,
+h6 {
+  font-size: 100%;
+}
+
+address,
+cite,
+dfn,
+em,
+var {
+  font-style: normal;
+} /* 将斜体扶正 */
+code,
+kbd,
+pre,
+samp,
+tt {
+  font-family: 'Courier New', Courier, monospace;
+} /* 统一等宽字体 */
+small {
+  font-size: 12px;
+} /* 小于 12px 的中文很难阅读，让 small 正常化 */
+
+/* 重置列表元素 */
+ul,
+ol {
+  list-style: none;
+}
+
+/* 重置文本格式元素 */
+a:focus,
+a:active {
+  outline: none;
+}
+
+a,
+a:focus,
+a:hover {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+
+abbr[title],
+acronym[title] {
+  /* 注：1.ie6 不支持 abbr; 2.这里用了属性选择符，ie6 下无效果 */
+  border-bottom: 1px dotted;
+  cursor: help;
+}
+
+q:before,
+q:after {
+  content: '';
+}
+
+/* 重置表单元素 */
+legend {
+  color: #000;
+} /* for ie6 */
+fieldset,
+img {
+  border: none;
+} /* img 搭车：让链接里的 img 无边框 */
+/* 注：optgroup 无法扶正 */
+button,
+input,
+select,
+textarea {
+  font-size: 100%; /* 使得表单元素在 ie 下能继承字体大小 */
+}
+
+
+/* 重置表格元素 */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* 重置 hr */
+hr {
+  border: none;
+  height: 1px;
+}
+
+/* 让非ie浏览器默认也显示垂直滚动条，防止因滚动条引起的闪烁 */
+html {
+  overflow-y: scroll;
+}
+
+
+/*超出内容显示省略号*/
+.ellipsis {
+  max-width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+// 多行
+.ellipsis-mult {
+  display: -webkit-box;
+  /*! autoprefixer: off */
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  /* autoprefixer: on */
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+/*小手*/
+.pointer{
+  cursor: pointer;
+}
+
+/*清除浮动*/
+.clearfloat {
+  *zoom: 1;
+}
+.clearfloat:before,
+.clearfloat:after {
+  display: table;
+  line-height: 0;
+  content: '';
+}
+.clearfloat:after {
+  clear: both;
+}
+
+.fl {
+  float: left;
+}
+.fr {
+  float: right;
+}
+
+
+// flex
+.flex-1 {
+  flex: 1;
+}
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+.flex-right-center {
+  justify-content: flex-end;
+  align-items: center;
+}
+// .flex-center-center {
+//   justify-content: center;
+//   align-items: center;
+// }
+.flex-center {
+  justify-content: center;
+  align-items: center;
+}
+.flex-center-start {
+  justify-content: center;
+  align-items: flex-start;
+}
+
+
+
+
+
+// 可复用样式
+// 箭头
+.arrows-left {
+  position: relative;
+  &::before {
+    position: absolute;
+    content: '';
+    height: 25%;
+    width: 25%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    border-bottom: 1.5px solid gray;
+    border-left: 1.5px solid gray;
+    transform: rotate(45deg);
+  }
+}
+.arrows-right {
+  position: relative;
+  &::before {
+    position: absolute;
+    content: '';
+    height: 25%;
+    width: 25%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    border-bottom: 1.5px solid gray;
+    border-right: 1.5px solid gray;
+    transform: rotate(-45deg);
+  }
+}
+
+// 间隔线
+.interval-right {
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute;
+    height: 90%;
+    width: 1px;
+    top: 50%;
+    right: -6px;
+    transform: translate(0, -50%);
+    background-color: #d9d9d9;
+  }
+}
+.interval-left {
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    height: 90%;
+    width: 1px;
+    top: 50%;
+    left: -6px;
+    transform: translate(0, -50%);
+    background-color: #d9d9d9;
+  }
+}
