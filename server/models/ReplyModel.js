@@ -1,30 +1,35 @@
-const Sequelize = require('sequelize');
-const sequelize = require('../config/sequelizeBase');
+const mongoose = require('mongoose')
+// const mongoosePaginate = require('mongoose-paginate');//分页插件
+let counter = 1
+var ModelSchema = new mongoose.Schema(
+  {
+    id: {
+      type: Number,
+      unique: true,
+      default: () => counter++
+    },
+    messageId: {
+      type: Number,
+      required: [true, '此项必填']
+    },
+    content: {
+      type: String,
+      required: [true, '此项必填']
+    }
+  },
+  {
+    timestamps: {
+      createdAt: 'createtime',
+      updatedAt: 'updatetime'
+    }
+  }
+)
 
-const ReplyModel = sequelize.define('reply',{
-	id:{
-		type:Sequelize.BIGINT,
-		primaryKey:true,
-		allowNull:false,
-		autoIncrement:true
-	},
-	messageId:{
-		type:Sequelize.BIGINT,
-		allowNull:false
-	},
-	content:{
-		type:Sequelize.STRING(500),
-		allowNull:false
-	},
-	createtime:{
-		type:Sequelize.DATE,
-		allowNull:false
-	},
-},{
-	timestamps:false,
-});
-
-// 反向生成数据库
-// sequelize.sync()
-
-module.exports = ReplyModel;
+// dietSchema.plugin(mongoosePaginate)
+const ReplyModel = mongoose.model('Reply', ModelSchema)
+ReplyModel.find({ id: { $gt: 0 } })
+  .sort({ id: -1 })
+  .then(([first, ...others]) => {
+    if (first) counter = first.id + 1
+  })
+module.exports = ReplyModel

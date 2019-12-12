@@ -1,170 +1,139 @@
 const AdminModel = require('../models/AdminModel.js')
 const UserModel = require('../models/UserModel.js')
 const jwt = require('jsonwebtoken')
+const Util = require('./../utils')
+
 const moment = require('moment')
 
+// 管理员注册
+exports.register = async (req, res, next) => {
+  try {
+    const find_user = await AdminModel.find({ account: req.body.account })
+    if (find_user && find_user.length) {
+      res.send(Util.returnMsg('用户已存在！'))
+    } else {
+      await new AdminModel(req.body).save()
+      res.send(Util.returnSuccess({ msg: '注册成功！' }))
+    }
+  } catch (error) {
+    console.log(error)
+    res.send(Util.returnMsg())
+  }
+}
+
 //管理员登录
-exports.login = async (req,res) => {
+exports.login = async (req, res) => {
   const admin = req.body
   try {
     //看该账号是否已经注册
     const accountSigned = await AdminModel.findOne({
-      where: {
-        account: admin.account
-      }
+      // where: {
+      account: admin.account
+      // }
     })
 
     //如果不存在
     if (!accountSigned) {
-      res.send({
-        code: 10000,
-        message: '该账号还没注册，请联系管理员注册'
-      })
+      res.send(Util.returnMsg('该账号还没注册，请联系管理员注册'))
       return
     }
     //已经存在
     else {
       //密码不对
       if (accountSigned.pwd !== admin.pwd) {
-        res.send({
-          code: 10000,
-          message: '密码不正确'
-        })
+        res.send(Util.returnMsg('密码不正确'))
         return
       }
       //密码正确
       else {
         const token = jwt.sign(accountSigned.id, 'chambers')
-        res.send({
-          code: 0,
-          data: {
-            token: token,
-            name: accountSigned.name
-          }
-        })
+        res.send(
+          Util.returnSuccess({
+            msg: '登录成功！',
+            data: {
+              token: token,
+              name: accountSigned.name
+            }
+          })
+        )
       }
     }
   } catch (e) {
     console.log(e)
-
-    res.send({
-      code: 10000,
-      message: '网络出错'
-    })
+    res.send(Util.returnMsg())
   }
 }
-
 
 //管理员修改密码
 exports.changePwd = async (req, res) => {
   const pwdObj = req.body
   pwdObj.adminToken = jwt.decode(pwdObj.adminToken)
   try {
-    const adminOldPwd = await AdminModel.findOne({
-      attributes: ['pwd'],
-      where: {
+    const adminOldPwd = await AdminModel.findOne(
+      {
         id: pwdObj.adminToken
       }
-    })
+    )
     if (adminOldPwd.pwd !== pwdObj.oldPwd) {
-      res.send({
-        code: 10000,
-        message: '旧密码错误'
-      })
+      res.send(Util.returnMsg('旧密码错误'))
       return
     }
-    const res_ = await AdminModel.update(
+    await AdminModel.findOneAndUpdate(
       {
-        pwd: pwdObj.newPwd
+        id: pwdObj.adminToken
       },
       {
-        where: {
-          id: pwdObj.adminToken
-        }
+        pwd: pwdObj.newPwd
       }
     )
-    res.send({
-      code: 0
-    })
+    res.send(Util.returnSuccess())
   } catch (e) {
-    console.log(e);
-    res.send({
-      code: 10000,
-      message: '网络出错'
-    })
+    console.log(e)
+    res.send(Util.returnMsg())
   }
 }
 
 //查询所有用户
-exports.getAllUser = async (req,res) => {
+exports.getAllUser = async (req, res) => {
   try {
-    const users = await UserModel.findAll({
-      attributes: ['id', 'email', 'nickname', 'sex', 'recipient', 'address', 'phone']
-    })
-    res.send({
-      code: 0,
-      data: users
-    })
-    // res.send({
-    //   code: 0,
-    //   data: users
-    // }
+    const users = await UserModel.find({}, 'id email nickname sex recipient address phone')
+    res.send(Util.returnSuccess({ data: users }))
   } catch (e) {
-    res.send({
-      code: 10000,
-      message: '网络出错'
-    })
-    // res.send({
-    //   code: 10000,
-    //   message: '网络出错'
-    // }
+    console.log(e)
+    res.send(Util.returnMsg())
   }
 }
 
 //删除用户
-exports.deleteUser = async (req,res) => {
+exports.deleteUser = async (req, res) => {
   const id = req.query.id
   try {
-    const res_ = await UserModel.destroy({
-      where: {
-        id: id
-      }
+    await UserModel.deleteOne({
+      id: id
     })
-    res.send({
-      code: 0
-    })
+    res.send(Util.returnSuccess())
   } catch (e) {
-    res.send({
-      code: 10000,
-      message: '网络出错'
-    })
+    console.log(e)
+    res.send(Util.returnMsg())
   }
 }
 
 //查询指定用户
-exports.searchUser = async (req,res) => {
+exports.searchUser = async (req, res) => {
   const word = req.query.word
   try {
-    const users = await UserModel.findAll({
-      attributes: ['id', 'email', 'nickname', 'sex', 'recipient', 'address', 'phone'],
-      where: {
-        $or: [
-          { email: word },
-          { phone: word },
-          { nickname: { $like: '%' + word + '%' } },
-          { recipient: { $like: '%' + word + '%' } },
-          { address: { $like: '%' + word + '%' } }
-        ]
-      }
+    const users = await UserModel.find({
+      $or: [
+        { email: word },
+        { phone: word },
+        // { nickname: { $like: '%' + word + '%' } },
+        // { recipient: { $like: '%' + word + '%' } },
+        // { address: { $like: '%' + word + '%' } }
+      ]
     })
-    res.send({
-      code: 0,
-      data: users
-    })
+    res.send(Util.returnSuccess({ data: users }))
   } catch (e) {
-    res.send({
-      code: 10000,
-      message: '网络出错'
-    })
+    console.log(e);
+    res.send(Util.returnMsg())
   }
 }

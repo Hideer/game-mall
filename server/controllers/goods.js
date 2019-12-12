@@ -10,6 +10,8 @@ const CommentModel = require('../models/CommentModel.js')
 const jwt = require('jsonwebtoken')
 const moment = require('moment')
 
+const Util = require('./../utils')
+
 //得到不同类目的商品
 exports.getGoodsByType = async (req, res) => {
   const typeId = req.query.typeId
@@ -17,55 +19,35 @@ exports.getGoodsByType = async (req, res) => {
     let goods
     //查全部
     if (typeId === '-1') {
-      goods = await GoodsModel.findAll({
-        attributes: ['id', 'name', 'img', 'typeId'],
-        order: [['createtime', 'DESC']]
-      })
+      goods = await GoodsModel.find({}, null, { sort: { updatetime: -1 } })
     } else {
-      goods = await GoodsModel.findAll({
-        attributes: ['id', 'name', 'img', 'typeId'],
-        where: {
+      goods = await GoodsModel.find(
+        {
           typeId: typeId
         },
-        order: [['createtime', 'DESC']]
-      })
+        null,
+        { sort: { updatetime: -1 } }
+      )
     }
     if (goods.length === 0) {
-      res.send({
-        code: 0,
-        data: []
-      })
+      res.send(Util.returnSuccess({ data: [] }))
       return
     }
-
     let goodsList = []
 
     for (let item of goods) {
       const spec = await GoodsDetailModel.findOne({
-        attributes: ['unitPrice'],
-        where: {
-          goodsId: item.dataValues.id
-        }
+        goodsId: item.id
       })
       goodsList.push({
-        id: item.dataValues.id,
-        img: item.dataValues.img,
-        name: item.dataValues.name,
-        price: spec ? spec.unitPrice : 0,
-        typeId: item.dataValues.typeId
+        ...item._doc,
+        price: spec ? spec.unitPrice : 0
       })
     }
-    res.send({
-      code: 0,
-      data: goodsList
-    })
+    res.send(Util.returnSuccess({ data: goodsList }))
   } catch (e) {
     console.log('异常错误', e)
-
-    res.send({
-      code: 10000,
-      message: '网络错误'
-    })
+    res.send(Util.returnMsg())
   }
 }
 
@@ -74,47 +56,40 @@ exports.getGoodsInfo = async (req, res) => {
   const id = req.query.id
   try {
     const goods = await GoodsModel.findOne({
-      attributes: ['id', 'name', 'img', 'desc', 'typeId'],
-      where: {
-        id: id
-      }
+      id: id
     })
     if (!goods) {
-      res.send({
-        code: 0,
-        data: {
-          img: '',
-          name: '',
-          desc: '',
-          specs: [],
-          typeId: ''
-        }
-      })
+      res.send(
+        Util.returnSuccess({
+          data: {
+            img: '',
+            name: '',
+            desc: '',
+            specs: [],
+            typeId: ''
+          }
+        })
+      )
       return
     }
 
-    const specs = await GoodsDetailModel.findAll({
-      attributes: ['id', 'specName', 'stockNum', 'unitPrice'],
-      where: {
-        goodsId: id
-      }
+    const specs = await GoodsDetailModel.find({
+      goodsId: id
     })
-
-    res.send({
-      code: 0,
-      data: {
-        img: goods.img,
-        name: goods.name,
-        desc: goods.desc,
-        typeId: goods.typeId,
-        specs: specs
-      }
-    })
+    res.send(
+      Util.returnSuccess({
+        data: {
+          img: goods.img,
+          name: goods.name,
+          desc: goods.desc,
+          typeId: goods.typeId,
+          specs: specs
+        }
+      })
+    )
   } catch (e) {
-    res.send({
-      code: 10000,
-      message: '网络错误'
-    })
+    console.log(e)
+    res.send(Util.returnMsg())
   }
 }
 
@@ -122,17 +97,15 @@ exports.getGoodsInfo = async (req, res) => {
 exports.getGoodsMsg = async (req, res) => {
   const id = req.query.id
   try {
-    const msgs = await MessageModel.findAll({
-      where: {
+    const msgs = await MessageModel.find(
+      {
         goodsId: id
       },
-      order: [['createtime', 'DESC']]
-    })
+      null,
+      { sort: { updatetime: -1 } }
+    )
     if (msgs.length === 0) {
-      res.send({
-        code: 0,
-        data: []
-      })
+      res.send(Util.returnSuccess({ data: [] }))
       return
     }
 
@@ -140,12 +113,8 @@ exports.getGoodsMsg = async (req, res) => {
     for (let msg of msgs) {
       let nickname = ''
       let user = await UserModel.findOne({
-        attributes: ['nickname'],
-        where: {
-          id: msg.dataValues.userId
-        }
+        id: msg.userId
       })
-
       if (!user) {
         nickname = '该用户已注销'
       } else {
@@ -154,10 +123,7 @@ exports.getGoodsMsg = async (req, res) => {
 
       let replyObj = {}
       let reply = await ReplyModel.findOne({
-        attributes: ['id', 'content', 'createtime'],
-        where: {
-          messageId: msg.dataValues.id
-        }
+        messageId: msg.id
       })
 
       if (reply) {
@@ -171,26 +137,18 @@ exports.getGoodsMsg = async (req, res) => {
       }
 
       msgList.push({
-        id: msg.dataValues.id,
-        content: msg.dataValues.content,
-        state: msg.dataValues.state,
+        ...msg._doc,
         asker: nickname,
-        time: moment(msg.dataValues.createtime)
+        time: moment(msg.createtime)
           .add('hours', 8)
           .format('MM-DD HH:mm'),
         reply: replyObj
       })
     }
-
-    res.send({
-      code: 0,
-      data: msgList
-    })
+    res.send(Util.returnSuccess({ data: msgList }))
   } catch (e) {
-    res.send({
-      code: 10000,
-      message: '网络错误'
-    })
+    console.log(e)
+    res.send(Util.returnMsg())
   }
 }
 
@@ -198,20 +156,15 @@ exports.getGoodsMsg = async (req, res) => {
 exports.askGoodsMsg = async (req, res) => {
   const token = req.body.token
   try {
-    const res_ = MessageModel.create({
+    const res_ = new MessageModel({
       userId: jwt.verify(token, 'chambers'),
       goodsId: req.body.goodsId,
-      content: req.body.msg,
-      createtime: new Date()
-    })
-    res.send({
-      code: 0
-    })
+      content: req.body.msg
+    }).save()
+    res.send(Util.returnSuccess({}))
   } catch (e) {
-    res.send({
-      code: 10000,
-      message: '网络出错'
-    })
+    console.log(e)
+    res.send(Util.returnMsg())
   }
 }
 
@@ -219,43 +172,32 @@ exports.askGoodsMsg = async (req, res) => {
 exports.addOrder = async (req, res) => {
   const token = req.body.token
   try {
-    const res_ = OrderModel.create({
+    const res_ = new OrderModel({
       userId: jwt.verify(token, 'chambers'),
       goodsDetailId: req.body.goodsDetailId,
       goodsNum: req.body.num,
       amount: req.body.amount,
-      state: req.body.state,
-      updatetime: new Date(),
-      createtime: new Date()
-    })
+      state: req.body.state
+    }).save()
     //如果是立即购买的话，库存要马上变动
     if (req.body.state === 1) {
       const spec = await GoodsDetailModel.findOne({
-        attributes: ['stockNum'],
-        where: {
-          id: req.body.goodsDetailId
-        }
+        id: req.body.goodsDetailId
       })
       let newNum = spec.stockNum - req.body.num
-      await GoodsDetailModel.update(
+      await GoodsDetailModel.findOneAndRemove(
         {
-          stockNum: newNum
+          id: req.body.goodsDetailId
         },
         {
-          where: {
-            id: req.body.goodsDetailId
-          }
+          stockNum: newNum
         }
       )
     }
-    res.send({
-      code: 0
-    })
+    res.send(Util.returnSuccess())
   } catch (e) {
-    res.send({
-      code: 10000,
-      message: '网络出错'
-    })
+    console.log(e)
+    res.send(Util.returnMsg())
   }
 }
 
@@ -267,38 +209,34 @@ exports.getOrderByState = async (req, res) => {
     let orders
     //查全部的
     if (state === -1) {
-      orders = await OrderModel.findAll({
-        where: {
+      orders = await OrderModel.find(
+        {
           userId: userId
         },
-        order: [['createtime', 'DESC']]
-      })
+        null,
+        { sort: { updatetime: -1 } }
+      )
     } else {
-      orders = await OrderModel.findAll({
-        where: {
+      orders = await OrderModel.find(
+        {
           userId: userId,
           state: state
         },
-        order: [['createtime', 'DESC']]
-      })
+        null,
+        { sort: { updatetime: -1 } }
+      )
     }
 
     let orderList = []
     for (let order of orders) {
       const spec = await GoodsDetailModel.findOne({
-        attributes: ['id', 'goodsId', 'specName', 'unitPrice'],
-        where: {
-          id: order.dataValues.goodsDetailId
-        }
+        id: order.goodsDetailId
       })
       if (!spec) {
         continue
       }
       const goods = await GoodsModel.findOne({
-        attributes: ['id', 'name', 'img'],
-        where: {
-          id: spec.goodsId
-        }
+        id: spec.goodsId
       })
       if (!goods) {
         continue
@@ -306,11 +244,9 @@ exports.getOrderByState = async (req, res) => {
 
       //如果是已完成订单，那就看看评价过没有
       let hasComment = false
-      if (order.dataValues.state === 3) {
+      if (order.state === 3) {
         let comment = await CommentModel.findOne({
-          where: {
-            orderId: order.dataValues.id
-          }
+          orderId: order.id
         })
         if (comment) {
           hasComment = true
@@ -318,8 +254,8 @@ exports.getOrderByState = async (req, res) => {
       }
 
       orderList.push({
-        id: order.dataValues.id,
-        createtime: moment(order.dataValues.createtime)
+        id: order.id,
+        createtime: moment(order.createtime)
           .add('hours', 8)
           .format('MM-DD HH:mm'),
         goods: {
@@ -330,23 +266,21 @@ exports.getOrderByState = async (req, res) => {
           spec: spec.specName,
           unitPrice: spec.unitPrice
         },
-        goodsNum: order.dataValues.goodsNum,
-        amount: order.dataValues.amount,
-        state: order.dataValues.state,
+        goodsNum: order.goodsNum,
+        amount: order.amount,
+        state: order.state,
         hasComment: hasComment
       })
     }
 
-    res.send({
-      code: 0,
-      data: orderList
-    })
+    res.send(
+      Util.returnSuccess({
+        data: orderList
+      })
+    )
   } catch (e) {
     console.log(e)
-    res.send({
-      code: 10000,
-      message: '网络出错'
-    })
+    res.send(Util.returnMsg())
   }
 }
 
@@ -355,54 +289,37 @@ exports.deleteOrder = async (req, res) => {
   const orderId = req.query.id
   try {
     const order = await OrderModel.findOne({
-      attributes: ['goodsDetailId', 'state', 'goodsNum'],
-      where: {
-        id: orderId
-      }
+      id: orderId
     })
     if (!order) {
-      res.send({
-        code: 0
-      })
+      res.send(Util.returnSuccess())
       return
     }
 
     //除了已完成订单和未付款订单外，其它状态的订单被删除，库存量都要加回去
     if (order.state === 1 || order.state === 2) {
       const spec = await GoodsDetailModel.findOne({
-        attributes: ['stockNum'],
-        where: {
-          id: order.goodsDetailId
-        }
+        id: order.goodsDetailId
       })
       let newNum = spec.stockNum + order.goodsNum
-      await GoodsDetailModel.update(
+      await GoodsDetailModel.findOneAndUpdate(
         {
-          stockNum: newNum
+          id: order.goodsDetailId
         },
         {
-          where: {
-            id: order.goodsDetailId
-          }
+          stockNum: newNum
         }
       )
     }
 
     //删除
-    const res_ = await OrderModel.destroy({
-      where: {
-        id: orderId
-      }
+    const res_ = await OrderModel.findOneAndDelete({
+      id: orderId
     })
 
-    res.send({
-      code: 0
-    })
+    res.send(Util.returnSuccess())
   } catch (e) {
-    res.send({
-      code: 10000,
-      message: '网络出错'
-    })
+    res.send(Util.returnMsg())
   }
 }
 
@@ -410,24 +327,18 @@ exports.deleteOrder = async (req, res) => {
 exports.confirmReceive = async (req, res) => {
   const orderId = req.query.id
   try {
-    await OrderModel.update(
+    await OrderModel.findOneAndUpdate(
       {
-        state: 3
+        id: orderId
       },
       {
-        where: {
-          id: orderId
-        }
+        state: 3
       }
     )
-    res.send({
-      code: 0
-    })
+    res.send(Util.returnSuccess())
   } catch (e) {
-    res.send({
-      code: 10000,
-      message: '网络出错'
-    })
+    console.log(e)
+    res.send(Util.returnMsg())
   }
 }
 
@@ -435,24 +346,18 @@ exports.confirmReceive = async (req, res) => {
 exports.pay = async (req, res) => {
   const orderId = req.query.id
   try {
-    await OrderModel.update(
+    await OrderModel.findOneAndUpdate(
       {
-        state: 1
+        id: orderId
       },
       {
-        where: {
-          id: orderId
-        }
+        state: 1
       }
     )
-    res.send({
-      code: 0
-    })
+    res.send(Util.returnSuccess())
   } catch (e) {
-    res.send({
-      code: 10000,
-      message: '网络出错'
-    })
+    console.log(e)
+    res.send(Util.returnMsg())
   }
 }
 
@@ -462,73 +367,54 @@ exports.settleAccounts = async (req, res) => {
   try {
     for (let item of cartList) {
       let order = await OrderModel.findOne({
-        attributes: ['goodsDetailId'],
-        where: {
-          id: item.id
-        }
+        id: item.id
       })
-      await OrderModel.update(
+      await OrderModel.findOneAndUpdate(
+        {
+          id: item.id
+        },
         {
           state: 1,
           goodsNum: item.goodsNum,
           amount: item.amount
-        },
-        {
-          where: {
-            id: item.id
-          }
         }
       )
       //更新库存
       let spec = await GoodsDetailModel.findOne({
-        attributes: ['stockNum'],
-        where: {
-          id: order.goodsDetailId
-        }
+        id: order.goodsDetailId
       })
       let newNum = spec.stockNum - item.goodsNum
-      await GoodsDetailModel.update(
+      await GoodsDetailModel.findOneAndUpdate(
         {
-          stockNum: newNum
+          id: order.goodsDetailId
         },
         {
-          where: {
-            id: order.goodsDetailId
-          }
+          stockNum: newNum
         }
       )
     }
-    res.send({
-      code: 0
-    })
+    res.send(Util.returnSuccess())
   } catch (e) {
-    res.send({
-      code: 10000,
-      message: '网络出错'
-    })
+    res.send(Util.returnMsg())
   }
 }
 
 //发送评价
 exports.sendComment = async (req, res) => {
   try {
-    const res_ = await CommentModel.create({
+    const res_ = await new CommentModel({
       userId: jwt.verify(req.body.token, 'chambers'),
       goodsId: req.body.goodsId,
       goodsDetailId: req.body.goodsDetailId,
       orderId: req.body.orderId,
       content: req.body.content,
-      score: req.body.score,
-      createtime: new Date()
-    })
-    res.send({
-      code: 0
-    })
+      score: req.body.score
+    }).save()
+
+    res.send(Util.returnSuccess())
   } catch (e) {
-    res.send({
-      code: 10000,
-      message: '网络出错'
-    })
+    console.log(e)
+    res.send(Util.returnMsg())
   }
 }
 
@@ -536,17 +422,15 @@ exports.sendComment = async (req, res) => {
 exports.getGoodsComment = async (req, res) => {
   const goodsId = req.query.goodsId
   try {
-    const comments = await CommentModel.findAll({
-      where: {
+    const comments = await CommentModel.find(
+      {
         goodsId: goodsId
       },
-      order: [['createtime', 'DESC']]
-    })
+      null,
+      { sort: { updatetime: -1 } }
+    )
     if (comments.length <= 0) {
-      res.send({
-        code: 0,
-        data: {}
-      })
+      res.send(Util.returnSuccess())
       return
     }
 
@@ -556,10 +440,7 @@ exports.getGoodsComment = async (req, res) => {
     for (let comment of comments) {
       sum += comment.score
       let user = await UserModel.findOne({
-        attributes: ['nickname', 'headimg'],
-        where: {
-          id: comment.dataValues.userId
-        }
+        id: comment.userId
       })
       if (!user) {
         user = {
@@ -569,10 +450,7 @@ exports.getGoodsComment = async (req, res) => {
       }
 
       let spec = await GoodsDetailModel.findOne({
-        attributes: ['specName'],
-        where: {
-          id: comment.dataValues.goodsDetailId
-        }
+        id: comment.goodsDetailId
       })
       if (!spec) {
         spec = {
@@ -581,11 +459,11 @@ exports.getGoodsComment = async (req, res) => {
       }
 
       commentList.push({
-        id: comment.dataValues.id,
+        id: comment.id,
         user: user,
-        score: comment.dataValues.score,
-        comment: comment.dataValues.content,
-        time: moment(comment.dataValues.createtime)
+        score: comment.score,
+        comment: comment.content,
+        time: moment(comment.createtime)
           .add('hours', 8)
           .format('MM-DD HH:mm'),
         specName: spec.specName
@@ -593,18 +471,18 @@ exports.getGoodsComment = async (req, res) => {
     }
     //算平均分
     let rate = sum / comments.length
-    res.send({
-      code: 0,
-      data: {
-        rate: rate,
-        commentList: commentList
-      }
-    })
+
+    res.send(
+      Util.returnSuccess({
+        data: {
+          rate: rate,
+          commentList: commentList
+        }
+      })
+    )
   } catch (e) {
-    res.send({
-      code: 10000,
-      message: '网络出错'
-    })
+    console.log(e)
+    res.send(Util.returnMsg())
   }
 }
 
@@ -613,20 +491,15 @@ exports.searchGoods = async (req, res) => {
   const keyword = req.query.keyword
   try {
     let goods
-    goods = await GoodsModel.findAll({
-      attributes: ['id', 'name', 'img', 'typeId'],
-      where: {
-        name: {
-          $like: '%' + keyword + '%'
-        }
+    goods = await GoodsModel.find(
+      {
+        name: { $regex: new RegExp(keyword, 'i') }
       },
-      order: [['createtime', 'DESC']]
-    })
+      null,
+      { sort: { updatetime: -1 } }
+    )
     if (goods.length === 0) {
-      res.send({
-        code: 0,
-        data: []
-      })
+      res.send(Util.returnSuccess({ data: [] }))
       return
     }
 
@@ -634,29 +507,23 @@ exports.searchGoods = async (req, res) => {
 
     for (let item of goods) {
       const spec = await GoodsDetailModel.findOne({
-        attributes: ['unitPrice'],
-        where: {
-          goodsId: item.dataValues.id
-        }
+        goodsId: item.id
       })
       goodsList.push({
-        id: item.dataValues.id,
-        img: item.dataValues.img,
-        name: item.dataValues.name,
+        id: item.id,
+        img: item.img,
+        name: item.name,
         price: spec ? spec.unitPrice : 0,
-        typeId: item.dataValues.typeId
+        typeId: item.typeId
       })
     }
-    res.send({
-      code: 0,
-      data: goodsList
-    })
+    res.send(
+      Util.returnSuccess({
+        data: goodsList
+      })
+    )
   } catch (e) {
     console.log(e)
-
-    res.send({
-      code: 10000,
-      message: '网络错误'
-    })
+    res.send(Util.returnMsg())
   }
 }

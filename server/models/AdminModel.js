@@ -1,31 +1,40 @@
-const Sequelize = require('sequelize');
-const sequelize = require('../config/sequelizeBase');
+const mongoose = require('mongoose')
+// const mongoosePaginate = require('mongoose-paginate');//分页插件
+let counter = 1
+var ModelSchema = new mongoose.Schema(
+  {
+    id: {
+      type: Number,
+      unique: true,
+      default: () => counter++
+    },
+    account: {
+      type: String,
+      unique: true,
+      required: [true, '此项必填']
+    },
+    name: {
+      type: String,
+      required: [true, '此项必填']
+    },
+    pwd: {
+      type: String,
+      required: [true, '此项必填']
+    }
+  },
+  {
+    timestamps: {
+      createdAt: 'createtime',
+      updatedAt: 'updatetime'
+    }
+  }
+)
 
-const AdminModel = sequelize.define('admin',{
-	id:{
-		type:Sequelize.BIGINT,
-		primaryKey:true,
-		allowNull:false,
-		autoIncrement:true
-	},
-	account:{
-		type:Sequelize.STRING(255),
-		unique:true,
-		allowNull:false
-	},
-	name:{
-		type:Sequelize.STRING(64),
-		allowNull:false
-	},
-	pwd:{
-		type:Sequelize.STRING(255),
-		allowNull:false
-	},
-},{
-	timestamps:false,
-});
-
-// 反向生成数据库
-// sequelize.sync()
-
-module.exports = AdminModel;
+// dietSchema.plugin(mongoosePaginate)
+const AdminModel = mongoose.model('Admin', ModelSchema)
+AdminModel.find({ id: { $gt: 0 } })
+  .sort({ id: -1 })
+  .then(([first, ...others]) => {
+    if (first) counter = first.id + 1
+  })
+module.exports = AdminModel

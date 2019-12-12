@@ -5,6 +5,8 @@
         <el-input
           v-model="goodsForm.goodsName"
           placeholder="请输入商品名称"
+          maxlength="20"
+          show-word-limit
         ></el-input>
       </el-form-item>
       <el-form-item label="选择类目">
@@ -31,6 +33,8 @@
               style="width:140px"
               v-model="item.specName"
               placeholder="请输入规格名称"
+              maxlength="12"
+              show-word-limit
             ></el-input>
             <span>库存量：</span>
             <el-input-number
@@ -62,6 +66,9 @@
           type="textarea"
           v-model="goodsForm.desc"
           placeholder="请输入简单描述"
+          rows="4"
+          maxlength="100"
+          show-word-limit
         ></el-input>
       </el-form-item>
       <el-form-item>

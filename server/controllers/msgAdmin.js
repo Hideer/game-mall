@@ -1,4 +1,3 @@
-const AdminModel = require('../models/AdminModel.js')
 const UserModel = require('../models/UserModel.js')
 const MessageModel = require('../models/MessageModel.js')
 const GoodsModel = require('../models/GoodsModel.js')
@@ -6,30 +5,26 @@ const ReplyModel = require('../models/ReplyModel.js')
 const jwt = require('jsonwebtoken')
 const moment = require('moment')
 
+const Util = require('./../utils')
+
 //获得未回复的留言
 exports.getNoReplyMsg = async (req, res) => {
   try {
-    const noReplyMsgs = await MessageModel.findAll({
-      attributes: ['id', 'userId', 'goodsId', 'content', 'createtime'],
-      order: [['createtime', 'DESC']],
-      where: {
+    const noReplyMsgs = await MessageModel.find(
+      {
         state: 0
-      }
-    })
+      },
+      null,
+      { sort: { updatetime: -1 } }
+    )
     if (noReplyMsgs.length === 0) {
-      res.send({
-        code: 0,
-        data: []
-      })
+      res.send(Util.returnSuccess())
       return
     } else {
       let messageList = []
       for (let msg of noReplyMsgs) {
         let user = await UserModel.findOne({
-          attributes: ['headimg', 'nickname'],
-          where: {
-            id: msg.dataValues.userId
-          }
+          id: msg.userId
         })
         //用户已被删除
         if (!user) {
@@ -38,10 +33,7 @@ exports.getNoReplyMsg = async (req, res) => {
           user.headimg = ''
         }
         let goods = await GoodsModel.findOne({
-          attributes: ['id', 'name'],
-          where: {
-            id: msg.dataValues.goodsId
-          }
+          id: msg.goodsId
         })
         //商品已被删除
         if (!goods) {
@@ -54,9 +46,9 @@ exports.getNoReplyMsg = async (req, res) => {
             name: user.nickname,
             headimg: user.headimg
           },
-          id: msg.dataValues.id,
-          content: msg.dataValues.content,
-          time: moment(msg.dataValues.createtime)
+          id: msg.id,
+          content: msg.content,
+          time: moment(msg.createtime)
             .add('hours', 8)
             .format('MM-DD HH:mm'),
           goods: {
@@ -65,30 +57,24 @@ exports.getNoReplyMsg = async (req, res) => {
           }
         })
       }
-      res.send({
-        code: 0,
-        data: messageList
-      })
+      res.send(Util.returnSuccess({ data: messageList }))
     }
   } catch (e) {
-    console.log('eeeeeeeeee', e)
-    res.send({
-      code: 10000,
-      message: '网络出错'
-    })
+    console.log(e)
+    res.send(Util.returnMsg())
   }
 }
 
 //获得已回复的留言
 exports.getRepliedMsg = async (req, res) => {
   try {
-    const repliedMsg = await MessageModel.findAll({
-      attributes: ['id', 'userId', 'goodsId', 'content', 'createtime'],
-      order: [['createtime', 'DESC']],
-      where: {
+    const repliedMsg = await MessageModel.find(
+      {
         state: 1
-      }
-    })
+      },
+      null,
+      { sort: { updatetime: -1 } }
+    )
     if (repliedMsg.length === 0) {
       res.send({
         code: 10000,
@@ -99,10 +85,7 @@ exports.getRepliedMsg = async (req, res) => {
       let messageList = []
       for (let msg of repliedMsg) {
         let user = await UserModel.findOne({
-          attributes: ['headimg', 'nickname'],
-          where: {
-            id: msg.dataValues.userId
-          }
+          id: msg.userId
         })
         //用户已被删除
         if (!user) {
@@ -111,10 +94,7 @@ exports.getRepliedMsg = async (req, res) => {
           user.headimg = ''
         }
         let goods = await GoodsModel.findOne({
-          attributes: ['id', 'name'],
-          where: {
-            id: msg.dataValues.goodsId
-          }
+          id: msg.goodsId
         })
         //商品已被删除
         if (!goods) {
@@ -123,20 +103,17 @@ exports.getRepliedMsg = async (req, res) => {
           goods.name = '该商品已下架'
         }
         const reply = await ReplyModel.findOne({
-          attributes: ['content'],
-          where: {
-            messageId: msg.dataValues.id
-          }
+          messageId: msg.id
         })
         messageList.push({
           user: {
             name: user.nickname,
             headimg: user.headimg
           },
-          id: msg.dataValues.id,
-          content: msg.dataValues.content,
+          id: msg.id,
+          content: msg.content,
           replyContent: reply.content,
-          time: moment(msg.dataValues.createtime)
+          time: moment(msg.createtime)
             .add('hours', 8)
             .format('MM-DD HH:mm'),
           goods: {
@@ -145,16 +122,11 @@ exports.getRepliedMsg = async (req, res) => {
           }
         })
       }
-      res.send({
-        code: 0,
-        data: messageList
-      })
+      res.send(Util.returnSuccess({ data: messageList }))
     }
   } catch (e) {
-    res.send({
-      code: 10000,
-      message: '网络出错'
-    })
+    console.log(e)
+    res.send(Util.returnMsg())
   }
 }
 
@@ -162,28 +134,22 @@ exports.getRepliedMsg = async (req, res) => {
 exports.reply = async (req, res) => {
   const replyObj = req.body
   try {
-    const res1 = await ReplyModel.create({
+    const res1 = await new ReplyModel({
       messageId: replyObj.id,
       content: replyObj.content,
       createtime: new Date()
-    })
-    const res2 = await MessageModel.update(
+    }).save()
+    const res2 = await MessageModel.findOneAndUpdate(
       {
-        state: 1
+        id: replyObj.id
       },
       {
-        where: {
-          id: replyObj.id
-        }
+        state: 1
       }
     )
-    res.send({
-      code: 0
-    })
+    res.send(Util.returnSuccess({}))
   } catch (e) {
-    res.send({
-      code: 10000,
-      message: '网络出错'
-    })
+    console.log(e)
+    res.send(Util.returnMsg())
   }
 }

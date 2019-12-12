@@ -4,101 +4,96 @@ const bcrypt = require('bcryptjs')
 const salt = bcrypt.genSaltSync(10)
 const moment = require('moment')
 
+const Util = require('./../utils')
+
 //注册
 exports.signup = async (req, res) => {
-  const hashPwd = bcrypt.hashSync(req.body.pwd, salt)
-  const user = {
-    email: req.body.email,
-    pwd: hashPwd,
-    nickname: req.body.nickname,
-    recipient: req.body.recipient,
-    address: req.body.address,
-    phone: req.body.phone,
-    createtime: new Date(),
-    updatetime: new Date()
-  }
+  try {
+    const hashPwd = bcrypt.hashSync(req.body.pwd, salt)
+    const user = {
+      email: req.body.email,
+      pwd: hashPwd,
+      nickname: req.body.nickname,
+      recipient: req.body.recipient,
+      address: req.body.address,
+      phone: req.body.phone
+    }
 
-  //验证邮箱唯一性
-  const emailUniq = await UserModel.findOne({
-    where: {
+    //验证邮箱唯一性
+    const emailUniq = await UserModel.findOne({
       email: req.body.email
-    }
-  })
-  //如果已经存在
-  if (emailUniq) {
-    res.send({
-      code: 10000,
-      message: '该邮箱已被注册'
     })
-    return
-  }
+    //如果已经存在
+    if (emailUniq) {
+      res.send(Util.returnMsg('该邮箱已被注册'))
+      return
+    }
 
-  //验证昵称唯一性
-  const nicknameUniq = await UserModel.findOne({
-    where: {
+    //验证昵称唯一性
+    const nicknameUniq = await UserModel.findOne({
       nickname: req.body.nickname
-    }
-  })
-  //如果已经存在
-  if (nicknameUniq) {
-    res.send({
-      code: 10000,
-      message: '该昵称已被注册'
     })
-    return
-  }
-
-  //插入数据
-  const res_ = await UserModel.create(user)
-  const token = jwt.sign(res_.id, 'chambers')
-  res.send({
-    code: 0,
-    data: {
-      name: res_.nickname,
-      token: token
+    //如果已经存在
+    if (nicknameUniq) {
+      res.send(Util.returnMsg('该昵称已被注册'))
+      return
     }
-  })
+
+    //插入数据
+    const UserInfo = await new UserModel(user).save()
+    const token = jwt.sign(UserInfo.id, 'chambers')
+
+    res.send(
+      Util.returnSuccess({
+        data: {
+          name: UserInfo.nickname,
+          token: token
+        }
+      })
+    )
+  } catch (e) {
+    console.log(e)
+    res.send(Util.returnMsg())
+  }
 }
 
 //登录
 exports.login = async (req, res) => {
-  const user = req.body
-  //看该邮箱是否已经注册
-  const emailSigned = await UserModel.findOne({
-    where: {
+  try {
+    const user = req.body
+    //看该邮箱是否已经注册
+    const emailSigned = await UserModel.findOne({
       email: user.account
-    }
-  })
-
-  //如果不存在
-  if (!emailSigned) {
-    res.send({
-      code: 10000,
-      message: '该邮箱还没注册，请前往注册'
     })
-    return
-  }
-  //已经存在
-  else {
-    //密码不对
-    if (!bcrypt.compareSync(user.pwd, emailSigned.pwd)) {
-      res.send({
-        code: 10000,
-        message: '密码不正确'
-      })
+
+    //如果不存在
+    if (!emailSigned) {
+      res.send(Util.returnMsg('该邮箱还没注册，请前往注册'))
       return
     }
-    //密码正确
+    //已经存在
     else {
-      const token = jwt.sign(emailSigned.id, 'chambers')
-      res.send({
-        code: 0,
-        data: {
-          name: emailSigned.nickname,
-          token: token
-        }
-      })
+      //密码不对
+      if (!bcrypt.compareSync(user.pwd, emailSigned.pwd)) {
+        res.send(Util.returnMsg('密码不正确'))
+        return
+      }
+      //密码正确
+      else {
+        const token = jwt.sign(emailSigned.id, 'chambers')
+        res.send(
+          Util.returnSuccess({
+            data: {
+              name: emailSigned.nickname,
+              token: token
+            }
+          })
+        )
+      }
     }
+  } catch (e) {
+    console.log(e)
+    res.send(Util.returnMsg())
   }
 }
 
@@ -107,111 +102,88 @@ exports.getData = async (req, res) => {
   const id = jwt.verify(req.query.token, 'chambers')
   try {
     const user = await UserModel.findOne({
-      attributes: ['id', 'email', 'nickname', 'recipient', 'address', 'phone', 'headimg'],
-      where: {
-        id: id
-      }
+      id: id
     })
     if (!user) {
-      res.send({
-        code: 10000,
-        message: '该用户不存在'
-      })
+      res.send(Util.returnMsg('该用户不存在'))
       return
     }
-    res.send({
-      code: 0,
-      data: {
-        id: user.id,
-        headimg: user.headimg,
-        email: user.email,
-        nickname: user.nickname,
-        recipient: user.recipient,
-        address: user.address,
-        phone: user.phone
-      }
-    })
+    res.send(
+      Util.returnSuccess({
+        data: {
+          id: user.id,
+          headimg: user.headimg,
+          email: user.email,
+          nickname: user.nickname,
+          recipient: user.recipient,
+          address: user.address,
+          phone: user.phone
+        }
+      })
+    )
   } catch (e) {
-    res.send({
-      code: 10000,
-      message: '网络错误'
-    })
+    console.log(e)
+    res.send(Util.returnMsg())
   }
 }
 
 //更改用户资料
 exports.updateUserData = async (req, res) => {
   const data = req.body
-
   try {
-    const res_ = await UserModel.update(
+    await UserModel.findOneAndUpdate(
+      {
+        id: data.id
+      },
       {
         recipient: data.recipient,
         address: data.address,
         phone: data.phone,
         nickname: data.nickname
-      },
-      {
-        where: {
-          id: data.id
-        }
       }
     )
     //正常修改
-    res.send({
-      code: 0,
-      nickname: data.nickname
-    })
+    res.send(
+      Util.returnSuccess({
+        msg: '修改成功'
+      })
+    )
   } catch (e) {
     //发生错误
-    res.send({
-      code: 10000,
-      message: '网络出错'
-    })
+    console.log(e);
+    res.send(Util.returnMsg())
   }
 }
 
 //修改密码
 exports.updatePwd = async (req, res) => {
   const data = req.body
-
-  const account = await UserModel.findOne({
-    where: {
+  try {
+    const account = await UserModel.findOne({
       id: data.id
-    }
-  })
-
-  if (!bcrypt.compareSync(data.oldPwd, account.pwd)) {
-    res.send({
-      code: 10000,
-      message: '密码不正确'
     })
-    return
-  }
-  //密码正确
-  else {
-    try {
+
+    if (!bcrypt.compareSync(data.oldPwd, account.pwd)) {
+      res.send(Util.returnMsg('密码不正确'))
+      return
+    }
+    //密码正确
+    else {
       const hashPwd = bcrypt.hashSync(data.newPwd, salt)
-      const res_ = await UserModel.update(
+      await UserModel.findOneAndUpdate(
         {
-          pwd: hashPwd
+          id: data.id
         },
         {
-          where: {
-            id: data.id
-          }
+          pwd: hashPwd
         }
       )
       //正常修改
-      res.send({
-        code: 0
-      })
-    } catch (e) {
-      //发生错误
-      res.send({
-        code: 10000,
-        message: '修改密码出错'
-      })
+      res.send(Util.returnSuccess({msg:'修改密码成功！'}))
     }
+  } catch (e) {
+    //发生错误
+    console.log(e)
+    res.send(Util.returnMsg('修改密码出错'))
   }
 }

@@ -5,11 +5,20 @@ const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
 const jwt = require('express-jwt')
 const cors = require('cors')
+const mongoose = require('mongoose')
+const configs = require('./config')
 const app = new Express()
-// const http = require('http').Server(app)
-// const io = require('socket.io')(http)
-// const io = require('socket.io').listen(app)
 
+// mongose数据库连接
+mongoose.connect(configs.mongodb.url, { useNewUrlParser: true, useUnifiedTopology: true })
+const db = mongoose.connection
+db.on('error', e => {
+  console.log('mongoose connection error:', e)
+})
+db.once('open', function() {
+  // we're connected!
+  console.log('connection ok! mongoose online')
+})
 
 // router
 const mall = require('./routes/mall')
@@ -46,16 +55,6 @@ app.use(
 app.use(mall)
 app.use(user)
 app.use(admin)
-
-// socket
-// io.sockets.on('connection', (socket) => {
-//     console.log('连接成功');
-//     // socket.emit('login', 'loginSuccess');
-//     // socket.on('toggle', value => {
-//     //     console.log(value);
-//     //     socket.emit('toggle', !value);
-//     // })
-// });
 
 // error-handling
 app.on('error', (err, ctx) => {

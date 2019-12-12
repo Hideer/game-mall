@@ -1,45 +1,36 @@
-const AdminModel = require('../models/AdminModel.js')
 const UserModel = require('../models/UserModel.js')
-const MessageModel = require('../models/MessageModel.js')
 const GoodsModel = require('../models/GoodsModel.js')
 const GoodsDetailModel = require('../models/GoodsDetailModel.js')
 const OrderModel = require('../models/OrderModel.js')
 const moment = require('moment')
 
-//获得订单s
+const Util = require('./../utils')
+
+//获得订单
 exports.getOrders = async (req, res) => {
   /*-1全部，0未付款，1已付款未发货，2已发货未确认收到，3确认到货订单完成*/
   const state = Number(req.query.state)
   try {
     let orders = []
     if (state === -1) {
-      orders = await OrderModel.findAll({
-        attributes: ['id', 'userId', 'goodsDetailId', 'goodsNum', 'amount', 'state', 'createtime'],
-        order: [['updatetime', 'DESC']]
-      })
+      orders = await OrderModel.find({}, null, { sort: {'updatetime': -1}})
     } else {
-      orders = await OrderModel.findAll({
-        attributes: ['id', 'userId', 'goodsDetailId', 'goodsNum', 'amount', 'state', 'updatetime'],
-        order: [['updatetime', 'DESC']],
-        where: {
+      orders = await OrderModel.find(
+        {
           state: state
-        }
-      })
+        },
+        null,
+        { sort: {'updatetime': -1}}
+      )
     }
     if (orders.length === 0) {
-      res.send({
-        code: 0,
-        data: []
-      })
+      res.send(Util.returnSuccess({ data: [] }))
       return
     }
     let orderList = []
     for (let order of orders) {
       let user = await UserModel.findOne({
-        attributes: ['nickname', 'recipient', 'address', 'phone'],
-        where: {
-          id: order.dataValues.userId
-        }
+        id: order.userId
       })
       if (!user) {
         user = {
@@ -50,10 +41,7 @@ exports.getOrders = async (req, res) => {
         }
       }
       let spec = await GoodsDetailModel.findOne({
-        attributes: ['goodsId', 'specName'],
-        where: {
-          id: order.dataValues.goodsDetailId
-        }
+        id: order.goodsDetailId
       })
       if (!spec) {
         spec = {
@@ -62,10 +50,7 @@ exports.getOrders = async (req, res) => {
         }
       }
       let goods = await GoodsModel.findOne({
-        attributes: ['name'],
-        where: {
-          id: spec.goodsId
-        }
+        id: spec.goodsId
       })
       if (!goods) {
         goods = {
@@ -73,7 +58,7 @@ exports.getOrders = async (req, res) => {
         }
       }
       orderList.push({
-        id: order.dataValues.id,
+        id: order.id,
         user: {
           nickname: user.nickname,
           name: user.recipient,
@@ -82,28 +67,28 @@ exports.getOrders = async (req, res) => {
         },
         goods: goods.name,
         spec: spec.specName,
-        num: order.dataValues.goodsNum,
-        amount: order.dataValues.amount,
+        num: order.goodsNum,
+        amount: order.amount,
         state:
-          order.dataValues.state === 0
+          order.state === 0
             ? '未付款'
-            : order.dataValues.state === 1
+            : order.state === 1
             ? '未发货'
-            : order.dataValues.state === 2
+            : order.state === 2
             ? '已发货'
             : '已到货',
-        time: moment(order.dataValues.updatetime).format('MM-DD HH:mm')
+        time: moment(order.updatetime).format('MM-DD HH:mm')
       })
     }
-    res.send({
-      code: 0,
-      data: orderList
-    })
+
+    res.send(
+      Util.returnSuccess({
+        data: orderList
+      })
+    )
   } catch (e) {
-    res.send({
-      code: 10000,
-      message: '网络出错'
-    })
+    console.log(e)
+    res.send(Util.returnMsg())
   }
 }
 
@@ -112,65 +97,49 @@ exports.getOrder = async (req, res) => {
   const id = Number(req.query.id)
   try {
     let order = await OrderModel.findOne({
-      attributes: ['id', 'goodsDetailId', 'goodsNum', 'amount', 'state'],
-      where: {
-        id: id
-      }
+      id: id
     })
     if (!order) {
-      res.send({
-        code: 0,
-        data: {}
-      })
+      res.send(Util.returnSuccess({ data: {} }))
       return
     }
     const spec = await GoodsDetailModel.findOne({
-      attributes: ['id', 'goodsId', 'specName'],
-      where: {
-        id: order.goodsDetailId
-      }
+      id: order.goodsDetailId
     })
-    const specs = await GoodsDetailModel.findAll({
-      attributes: ['id', 'specName', 'unitPrice'],
-      where: {
-        goodsId: spec.goodsId
-      }
+    const specs = await GoodsDetailModel.find({
+      goodsId: spec.goodsId
     })
     const goods = await GoodsModel.findOne({
-      attributes: ['name'],
-      where: {
-        id: spec.goodsId
-      }
+      id: spec.goodsId
     })
-    res.send({
-      code: 0,
-      data: {
-        id: order.id,
-        goods: goods.name,
-        amount: order.amount,
-        num: order.goodsNum,
-        spec: specs,
-        states: [
-          { id: 0, name: '未付款' },
-          { id: 1, name: '未发货' },
-          { id: 2, name: '已发货' },
-          { id: 3, name: '已到货' }
-        ],
-        curSpec: {
-          id: spec.id,
-          name: spec.specName
-        },
-        curState: {
-          id: order.state,
-          name: order.state === 0 ? '未付款' : order.state === 1 ? '未发货' : order.state === 2 ? '已发货' : '已到货'
+    res.send(
+      Util.returnSuccess({
+        data: {
+          id: order.id,
+          goods: goods.name,
+          amount: order.amount,
+          num: order.goodsNum,
+          spec: specs,
+          states: [
+            { id: 0, name: '未付款' },
+            { id: 1, name: '未发货' },
+            { id: 2, name: '已发货' },
+            { id: 3, name: '已到货' }
+          ],
+          curSpec: {
+            id: spec.id,
+            name: spec.specName
+          },
+          curState: {
+            id: order.state,
+            name: order.state === 0 ? '未付款' : order.state === 1 ? '未发货' : order.state === 2 ? '已发货' : '已到货'
+          }
         }
-      }
-    })
+      })
+    )
   } catch (e) {
-    res.send({
-      code: 10000,
-      message: '网络出错'
-    })
+    console.log(e)
+    res.send(Util.returnMsg())
   }
 }
 
@@ -179,49 +148,35 @@ exports.changeOrder = async (req, res) => {
   const orderObj = req.body
   try {
     const order = await OrderModel.findOne({
-      attributes: ['goodsNum'],
-      where: {
-        id: orderObj.id
-      }
+      id: orderObj.id
     })
     const difNum = orderObj.num - order.goodsNum
     const spec = await GoodsDetailModel.findOne({
-      attributes: ['unitPrice', 'stockNum'],
-      where: {
-        id: orderObj.spec
-      }
+      id: orderObj.spec
     })
-    await GoodsDetailModel.update(
+    await GoodsDetailModel.findOneAndUpdate(
       {
-        stockNum: spec.stockNum - difNum
+        id: orderObj.spec
       },
       {
-        where: {
-          id: orderObj.spec
-        }
+        stockNum: spec.stockNum - difNum
       }
     )
-    const res_ = await OrderModel.update(
+    const res_ = await OrderModel.findOneAndUpdate(
+      {
+        id: orderObj.id
+      },
       {
         goodsNum: orderObj.num,
         goodsDetailId: orderObj.spec,
         state: orderObj.state,
         amount: spec.unitPrice * orderObj.num
-      },
-      {
-        where: {
-          id: orderObj.id
-        }
       }
     )
-    res.send({
-      code: 0
-    })
+    res.send(Util.returnSuccess({ data: {} }))
   } catch (e) {
-    res.send({
-      code: 10000,
-      message: '网络出错'
-    })
+    console.log(e)
+    res.send(Util.returnMsg())
   }
 }
 
@@ -230,43 +185,30 @@ exports.deleteOrder = async (req, res) => {
   const id = req.query.id
   try {
     const order = await OrderModel.findOne({
-      attributes: ['state', 'goodsNum'],
-      where: {
-        id: id
-      }
+      id: id
     })
     //还没结束的订单，那就库存增加
     if (order.state !== 3) {
       const goodsDetail = await GoodsDetailModel.findOne({
-        attributes: ['stockNum'],
-        where: {
-          id: id
-        }
+        id: id
       })
-      await GoodsDetailModel.update(
+      await GoodsDetailModel.findOneAndUpdate(
+        {
+          id: id
+        },
+
         {
           stockNum: goodsDetail.stockNum + order.goodsNum
-        },
-        {
-          where: {
-            id: id
-          }
         }
       )
     }
 
-    const res_ = await OrderModel.destroy({
-      where: {
-        id: id
-      }
+    const res_ = await OrderModel.findOneAndDelete({
+      id: id
     })
-    res.send({
-      code: 0
-    })
+    res.send(Util.returnSuccess({ data: {} }))
   } catch (e) {
-    res.send({
-      code: 10000,
-      message: '网络出错'
-    })
+    console.log(e)
+    res.send(Util.returnMsg())
   }
 }

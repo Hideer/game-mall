@@ -51,6 +51,21 @@
             width="100"
           >
           </el-table-column>
+          <el-table-column fixed label="订单状态" prop="state">
+            <template slot-scope="scope">
+              <el-tag
+                :type="
+                  {
+                    未付款: 'info',
+                    未发货: 'danger',
+                    已发货: '',
+                    已到货: 'success'
+                  }[scope.row.state]
+                "
+                >{{ scope.row.state }}</el-tag
+              >
+            </template>
+          </el-table-column>
           <el-table-column
             show-overflow-tooltip
             label="用户昵称"
@@ -83,14 +98,7 @@
           </el-table-column>
           <el-table-column show-overflow-tooltip label="金额" prop="amount">
           </el-table-column>
-          <el-table-column show-overflow-tooltip label="订单状态" prop="state">
-            <template slot-scope="scope">
-              <el-tag
-                :type="{'未付款':'info','未发货':'danger','已发货':'','已到货':'success'}[scope.row.state]"
-                >{{ scope.row.state }}</el-tag
-              >
-            </template>
-          </el-table-column>
+
           <el-table-column show-overflow-tooltip label="更新时间" prop="time">
           </el-table-column>
           <el-table-column fixed="right" align="right" width="240">

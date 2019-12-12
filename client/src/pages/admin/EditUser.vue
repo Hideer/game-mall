@@ -90,7 +90,7 @@
     </div>
 
     <!-- user edit -->
-    <el-dialog title="会员信息" :visible.sync="editUserFormVisible">
+    <el-dialog title="会员信息" :visible.sync="editUserFormVisible" width="400px">
       <el-form :model="editUserForm">
         <el-form-item label="会员账号">
           <el-input
@@ -121,7 +121,11 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="联系电话">
-          <el-input v-model="editUserForm.phone" autocomplete="off"></el-input>
+          <el-input
+            v-model="editUserForm.phone"
+            type="number"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
