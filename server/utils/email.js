@@ -5,7 +5,7 @@ const fs = require('fs')
 const path = require('path')
 const emailBase = require('./../config/emailBase')
 
-exports.postEmail = async (req, res) => {
+exports.postEmail = async opt => {
   //设置邮箱配置
   let transporter = nodemailer.createTransport({
     host: emailBase.host, //邮箱服务的主机，如smtp.qq.com
@@ -20,14 +20,14 @@ exports.postEmail = async (req, res) => {
   const template = ejs.compile(fs.readFileSync(path.resolve(__dirname, 'email.ejs'), 'utf8'))
 
   const html = template({
-    code: 'Ejs123'
+    code: 'Ejs123',
+    goods: opt.goods
   })
-
 
   let mailOptions = {
     from: `${emailBase.hostTitle} <${emailBase.auth.user}>`, //谁发的
-    to: 'yu_meng_cheng@163.com', //发给谁
-    subject: 'Hello', //主题是什么
+    to: opt.email, //发给谁
+    subject: 'LovePlay-Activation code', //主题是什么
     // text: '', //文本内容
     html //html模板
 
@@ -39,21 +39,13 @@ exports.postEmail = async (req, res) => {
     //   }
     // ]
   }
-
-  //发送邮件
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      res.send({
-        code: 10000,
-        message: '获取验证码失败'
-      })
-      return console.log('emailERROR', error)
-    }
-    res.send({
-      code: 0,
-      data: info
+  return new Promise((resolve, reject) => {
+    //发送邮件
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return reject(error)
+      }
+      resolve(info)
     })
-    // console.log(`Message: ${info.messageId}`)
-    // console.log(`sent: ${info.response}`)
   })
 }

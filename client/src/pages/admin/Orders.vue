@@ -62,19 +62,42 @@
             prop="user.phone"
           >
           </el-table-column>
-          <el-table-column show-overflow-tooltip :label="$t('Orders.goods')" prop="goods">
+          <el-table-column
+            show-overflow-tooltip
+            :label="$t('Orders.goods')"
+            prop="goods"
+          >
           </el-table-column>
-          <el-table-column show-overflow-tooltip :label="$t('Orders.goods-spec')"  prop="spec">
+          <el-table-column
+            show-overflow-tooltip
+            :label="$t('Orders.goods-spec')"
+            prop="spec"
+          >
           </el-table-column>
-          <el-table-column show-overflow-tooltip :label="$t('Orders.goods-num')"   prop="num">
+          <el-table-column
+            show-overflow-tooltip
+            :label="$t('Orders.goods-num')"
+            prop="num"
+          >
           </el-table-column>
-          <el-table-column show-overflow-tooltip :label="$t('Orders.goods-amount')"  prop="amount">
+          <el-table-column
+            show-overflow-tooltip
+            :label="$t('Orders.goods-amount')"
+            prop="amount"
+          >
           </el-table-column>
-          <el-table-column show-overflow-tooltip :label="$t('Orders.update-time')"  prop="time">
+          <el-table-column
+            show-overflow-tooltip
+            :label="$t('Orders.update-time')"
+            prop="time"
+          >
           </el-table-column>
           <el-table-column fixed="right" align="right" width="240">
             <template slot="header" slot-scope="scope">
-              <el-input v-model="search" placeholder="Please enter a search phrase">
+              <el-input
+                v-model="search"
+                placeholder="Please enter a search phrase"
+              >
                 <!-- @keyup.enter.native="searchUser" -->
                 <!-- <el-button
               slot="append"
@@ -84,7 +107,7 @@
               </el-input>
             </template>
             <template slot-scope="scope">
-              <el-button @click="editOrder(scope.row.id)">编辑</el-button>
+              <el-button @click="editOrder(scope.row)">编辑</el-button>
               <el-button type="danger" @click="deleteOrder(scope.row.id)"
                 >删除</el-button
               >
@@ -147,8 +170,8 @@ export default {
           console.log(e);
         });
     },
-    editOrder(id) {
-      this.$router.push("/orders/d/" + id);
+    editOrder(item) {
+      this.$router.push("/orders/d/" + item.id);
     },
     deleteOrder(id) {
       this.loading = true;

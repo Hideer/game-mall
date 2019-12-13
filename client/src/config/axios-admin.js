@@ -10,8 +10,8 @@ axios.defaults.baseURL = "http://localhost:3000";
 // http request 拦截器
 axios.interceptors.request.use(
   config => {
-    if (store.state.adminToken) {
-      config.headers.Authorization = `Bearer ${store.state.adminToken}`;
+    if (store.state.userAdmin.adminToken) {
+      config.headers.Authorization = `Bearer ${store.state.userAdmin.adminToken}`;
     }
     return config;
   },

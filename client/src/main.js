@@ -8,7 +8,6 @@ import i18n from "./locales/client";
 import "./assets/css/common.less";
 import "./assets/font/iconfont.css";
 
-import { Connection } from "./socketio_client";
 
 Vue.config.productionTip = false;
 
@@ -16,7 +15,7 @@ import "element-ui/lib/theme-chalk/index.css";
 import ElementUI from "element-ui";
 Vue.use(ElementUI, { size: "mini", zIndex: 3000 });
 // socket 链接
-Connection();
+
 /* eslint-disable no-new */
 new Vue({
   el: "#app",

@@ -113,7 +113,7 @@ export default {
         id: this.$route.params.id,
         state: this.temStateId,
         spec: this.temSpecId,
-        num: this.temNum
+        num: this.temNum,
       });
       res
         .then(() => {

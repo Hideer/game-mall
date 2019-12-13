@@ -3,6 +3,8 @@ const GoodsModel = require('../models/GoodsModel.js')
 const GoodsDetailModel = require('../models/GoodsDetailModel.js')
 const OrderModel = require('../models/OrderModel.js')
 const moment = require('moment')
+const email = require('./../utils/email')
+const socketio = require('./../socketio')
 
 const Util = require('./../utils')
 
@@ -60,6 +62,7 @@ exports.getOrders = async (req, res) => {
       orderList.push({
         id: order.id,
         user: {
+          id: order.userId, //用户id
           nickname: user.nickname,
           name: user.recipient,
           address: user.address,
@@ -99,7 +102,7 @@ exports.getOrder = async (req, res) => {
     const spec = await GoodsDetailModel.findOne({
       id: order.goodsDetailId
     })
-    console.log(order,spec)
+    console.log(order, spec)
     const specs = await GoodsDetailModel.find({
       goodsId: spec.goodsId
     })
@@ -167,7 +170,35 @@ exports.changeOrder = async (req, res) => {
         amount: spec.unitPrice * orderObj.num
       }
     )
+
+    let user = await UserModel.findOne({
+      id: order.userId
+    })
+
     res.send(Util.returnSuccess({ data: {} }))
+    if (orderObj.state == 2) {
+      const goods = await GoodsModel.findOne({
+        id: spec.goodsId
+      })
+
+      email
+        .postEmail({
+          email: user.email,
+          nickname: user.nickname,
+          goods: goods.name
+        })
+        .then(() => {
+          socketio.messageOrder({
+            type: 'success',
+            msg: '订单已发货，请注意邮箱查收激活码'
+          })
+        })
+    } else {
+      socketio.messageOrder({
+        type: 'info',
+        msg: '订单状态已变更请注意查收'
+      })
+    }
   } catch (e) {
     console.log(e)
     res.send(Util.returnMsg())

@@ -162,13 +162,11 @@ export default {
     TipsInput
   },
   sockets: {
-    noticeInfo: function(data) {
-      console.log(data);
-      this.$notify({
-        title: "系统消息提醒",
-        offset: 50,
-        duration: 0,
-        message: data
+    messageOrder: function({ type = "info", msg = "一个新的提醒" } = {}) {
+      this.$notify[type]({
+        title: "订单更新提醒",
+        // duration: 0,
+        message: msg
       });
     }
   },

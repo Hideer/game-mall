@@ -4,7 +4,7 @@ const email = require('./../utils/email')
 // import { postEmail } from './../utils/email'
 
 // 发送邮件
-router.get('/api/user/email', email.postEmail)
+router.post('/api/user/email', email.postEmail)
 
 //注册
 router.post('/api/user/signup', user.signup);
