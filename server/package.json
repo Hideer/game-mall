@@ -6,11 +6,13 @@
     "start": "nodemon bin/www",
     "dev": "./node_modules/.bin/nodemon bin/www",
     "prd": "pm2 start bin/www",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "export NODE_ENV=test PORT=3300 && mocha 'test/**/*.test.js' --exit",
+    "cov": "export NODE_ENV=test PORT=3300 && nyc mocha 'test/**/*.test.js' --exit"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
+    "chai": "^4.2.0",
     "cors": "^2.8.5",
     "debug": "^2.6.3",
     "ejs": "^3.0.1",
@@ -19,16 +21,20 @@
     "jsonwebtoken": "^8.1.0",
     "md5": "^2.2.1",
     "method-override": "^3.0.0",
+    "mocha": "^6.2.2",
     "moment": "^2.19.1",
     "moment-timezone": "^0.5.14",
     "mongoose": "^5.8.0",
     "morgan": "^1.9.1",
     "mysql2": "^1.4.2",
     "nodemailer": "^6.4.1",
+    "nyc": "^14.1.1",
+    "power-assert": "^1.6.1",
     "pug": "^2.0.0-rc.1",
     "request": "^2.83.0",
     "sequelize": "^4.20.1",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.3.0",
+    "supertest": "^4.0.2"
   },
   "devDependencies": {
     "nodemon": "^1.19.4"
