@@ -26,7 +26,7 @@ export default {
     }
 
     if (title) {
-      vnodes.push(<span slot="title">{title}</span>);
+      vnodes.push(<span slot="title">{ i18n.t(`layout.${title}`) }</span>);
     }
     return vnodes;
   }

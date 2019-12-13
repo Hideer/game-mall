@@ -3,7 +3,7 @@
     <FixedNav v-show="navShouldFixed">
       <div slot="navContent" class="container fixedNavContainer">
         <h3 class="fixedLeft" @click="navTo('/mall/show/index')">
-          爱玩-游戏商城
+          {{ $t("system.title") }}
         </h3>
         <ul class="fixedRight">
           <li
@@ -101,7 +101,7 @@ export default {
       .then(data => {
         data.unshift({
           id: -1,
-          name: "首页"
+          name: this.$t("system.Home-page")
         });
         this.typeList = data;
       })
@@ -159,10 +159,13 @@ export default {
     width: 100%;
     text-align: center;
     background-color: white;
-    padding: 16px 0 26px;
+    padding: 15px;
+    margin-bottom: 2px;
+    box-shadow: 0 4px 8px -3px rgba(0, 0, 0, 0.1),
+      0 5px 10px -5px rgba(0, 0, 0, 0.1);
     li {
       display: inline-block;
-      width: 60px;
+      // width: 60px;
       margin: 0 50px;
       text-align: center;
       height: 30px;
@@ -197,7 +200,7 @@ export default {
       vertical-align: middle;
       li {
         display: inline-block;
-        width: 60px;
+        // width: 60px;
         margin: 0 30px;
         text-align: center;
         height: 30px;

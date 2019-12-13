@@ -1,0 +1,43 @@
+{
+  "system": {
+    "title": "爱玩-游戏商城",
+    "account": "账号",
+    "pwd": "密码",
+    "login": "登录",
+    "register": "注册",
+    "Welcome": "欢迎您",
+    "My-ZOE": "个人中心",
+    "log-out": "退出登录",
+    "Home-page": "首页"
+  },
+  "index": {
+    "The-new-start": "新品首发",
+    "The-new-start-info": "周一周四上新，为你寻觅世间好物",
+    "The-new-start-more": "更多新品",
+    "Time-to-buy": "限时购",
+    "Time-to-buy-info": "抢抢抢，好货不等人",
+    "Time-to-buy-more": "更多抢购",
+    "Brand-manufacturer": "品牌制作商",
+    "Brand-manufacturer-info": "工厂直达消费者，剔除品牌溢价",
+    "Brand-manufacturer-more": "更多制造商"
+  },
+  "order": {
+    "shopping-cart": "购物车",
+    "my-order": "我的订单",
+    "modify-data": "修改资料"
+  },
+  "cart": {
+    "info": "The shopping cart is still empty",
+    "Blurb": "Blurb",
+    "unit-price": "unit-price",
+    "amount": "amount",
+    "subtotal": "subtotal",
+    "operation": "operation",
+    "amount-payable": "amount payable"
+  },
+  "public": {
+    "delete": "delete",
+    "confirm": "confirm",
+    "pay": "Pay"
+  }
+}

@@ -1,11 +1,6 @@
 <template>
   <div class="MallIndex">
-    <!-- <FadeSwiper class="swiperBox" :width="clientWidth" height="420px">
-      <img class="banner" slot="item1" :src="'http://www.ga-me.com/upload/2017/06/caf59b9f1e3bc874ff25af49f6fc902b.jpg'" />
-      <img class="banner" slot="item2" :src="'http://www.ga-me.com/upload/2016/12/5ef211a8ce3884205495d38ec02f3059.jpg'" />
-      <img class="banner" slot="item3" :src="'http://www.ga-me.com/upload/2019/01/51e287a5d64e9bfd7ae80563b15a9a60.jpg'" />
-    </FadeSwiper> -->
-    <el-carousel class="banner-container" :interval="4000" height="400px">
+    <el-carousel class="banner-container" :interval="4000" height="500px">
       <el-carousel-item v-for="item in bannnerData" :key="item">
         <el-image
           style="height:100%;width:100%"
@@ -14,166 +9,191 @@
         ></el-image>
       </el-carousel-item>
     </el-carousel>
-    <section class="newGoods section">
-      <SectionHeader
-        title="新品首发"
-        tips="周一周四上新，为你寻觅世间好物"
-        moreText="更多新品>"
-      />
-      <Slick
-        :ulWidth="266 * goodsList.length + 10 * (goodsList.length - 1)"
-        :showWidth="266 * 4 + 10 * 3"
-        :height="360"
-      >
-        <ul
-          class="goodsList"
-          :style="{
-            width: `${266 * goodsList.length + 10 * (goodsList.length - 1)}px`
-          }"
-          slot="list"
-        >
-          <GoodsItem
-            v-for="(item, index) in goodsList"
-            :style="{ marginRight: (index + 1) % 4 === 0 ? '0px' : '10px' }"
-            :key="+item.id"
-            :id="item.id"
-            :img="item.img"
-            :name="item.name"
-            :price="item.price"
-          />
-        </ul>
-      </Slick>
-    </section>
-    <!-- <section class="flashSale section">
-      <SectionHeader title="限时购" tips="抢抢抢，好货不等人" moreText="更多抢购>"/>
-      <div class="content">
-        <div class="left">
-          <p class="title">特价场</p>
-          <hr/>
-          <p class="tips">距离结束还剩</p>
-          <div class="countBox">
-            <span class="time">{{h}}</span>
-            <span>:</span>
-            <span class="time">{{m}}</span>
-            <span>:</span>
-            <span class="time">{{s}}</span>
-          </div>
-          <div class="allBtn">查看全部 ></div>
-        </div><ul class="right"><li v-for="(item,index) in goodsList.slice(0,4)" :key="item.id">
-            <el-image class="leftImg" :fit="'contain'" :src="item.img" lazy></el-image>
-            <div class="rightBox">
-              <p class="goodsName ellipsis" @click="navTo('/mall/goods/'+item.id)">{{item.name}}</p>
-              <div class="less">
-                <span class="lessBar"></span>
-                <span class="lessNum">还剩86件</span>
-              </div>
-              <div class="price">
-                <span class="nowPrice">限时价¥{{item.price}}</span>
-                <span class="beforePrice">原价¥{{item.price+60}}</span>
-              </div>
-              <div class="buyBtn" @click="navTo('/mall/goods/'+item.id)">立即抢购</div>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </section> -->
-    <!-- 人气推荐 -->
-    <!-- <section class="hotGoods section">
-      <SectionHeader title="人气推荐" tips="最火最潮商品，为您挑选" moreText="更多推荐>"/>
-      <div class="content">
-        <ul class="left">
-          <GoodsItem
-            :id="goodsList[0].id"
-            :img="goodsList[0].img"
-            :name="goodsList[0].name"
-            :price="goodsList[0].price"
-          />
-        </ul>
-        <ul class="right">
-           <GoodsItem
-            v-for="(item,index) in goodsList.slice(3,9)"
-            :style="{marginBottom: index<=2?'10px':'0px'}"
-            :key="+item.id"
-            :id="item.id"
-            :img="item.img"
-            :name="item.name"
-            :price="item.price"
-          />
-        </ul>
-      </div>
-    </section> -->
-    <section class="maker section">
-      <SectionHeader
-        title="品牌制造商"
-        tips="工厂直达消费者，剔除品牌溢价"
-        moreText="更多制造商>"
-      />
-      <div class="content">
-        <ZoomImg
-          imgSrc="http://yanxuan.nosdn.127.net/0266209ded1751f599fe0dc21bb33e02.jpg"
-          class="left"
-        >
-          <div class="makerInfo" slot="otherEle">
-            <p class="large">Adidas制造商</p>
-            <hr />
-            <p class="small">35元起</p>
-          </div>
-        </ZoomImg>
-        <ZoomImg
-          imgSrc="http://yanxuan.nosdn.127.net/7cd0c8ed77da498090fb67c288ef05be.jpg"
-          class="center"
-        >
-          <div class="makerInfo" slot="otherEle">
-            <p class="large">UGG制造商</p>
-            <hr />
-            <p class="small">129元起</p>
-          </div>
-        </ZoomImg>
-        <div class="right">
-          <ZoomImg
-            imgSrc="http://yanxuan.nosdn.127.net/d824afe357e61fbee097412c5894c6ce.jpg"
-          >
-            <div class="makerInfo" slot="otherEle">
-              <p class="large">新秀丽制造商</p>
-              <hr />
-              <p class="small">49元起</p>
-            </div>
-          </ZoomImg>
-          <ZoomImg
-            imgSrc="http://yanxuan.nosdn.127.net/cf5f4a0d110ca17b9e0a80e6f7e6184b.jpg"
-          >
-            <div class="makerInfo" slot="otherEle">
-              <p class="large">MUJI制造商</p>
-              <hr />
-              <p class="small">12.9元起</p>
-            </div>
-          </ZoomImg>
-        </div>
-      </div>
-    </section>
-    <section
-      class="typeSection section"
-      v-for="(item, index) in typeList.slice(1)"
-      :key="item.id"
-    >
-      <SectionHeader
-        :title="item.name"
-        tips=""
-        moreText="查看更多>"
-        @click.native="selectType(item.id)"
-      />
-      <ul class="content">
-        <GoodsItem
-          v-for="(item, index) in filterGoodsByType(item.id).slice(0, 4)"
-          :style="{ marginRight: (index + 1) % 4 === 0 ? '0px' : '25px' }"
-          :key="+item.id"
-          :id="item.id"
-          :img="item.img"
-          :name="item.name"
-          :price="item.price"
+    <div class="container-wrapper-public">
+      <section class="newGoods section">
+        <SectionHeader
+          :title="$t('index.The-new-start')"
+          :tips="$t('index.The-new-start-info')"
+          :moreText="$t('index.The-new-start-more') + '>'"
         />
-      </ul>
-    </section>
+        <Slick
+          :ulWidth="266 * goodsList.length + 10 * (goodsList.length - 1)"
+          :showWidth="266 * 4 + 10 * 3"
+          :height="360"
+        >
+          <ul
+            class="goodsList"
+            :style="{
+              width: `${266 * goodsList.length + 10 * (goodsList.length - 1)}px`
+            }"
+            slot="list"
+          >
+            <GoodsItem
+              v-for="(item, index) in goodsList"
+              :style="{ marginRight: (index + 1) % 4 === 0 ? '0px' : '10px' }"
+              :key="+item.id"
+              :id="item.id"
+              :img="item.img"
+              :name="item.name"
+              :price="item.price"
+            />
+          </ul>
+        </Slick>
+      </section>
+      <section class="flashSale section">
+        <SectionHeader
+          :title="$t('index.Time-to-buy')"
+          :tips="$t('index.Time-to-buy-info')"
+          :moreText="$t('index.Time-to-buy-more') + '>'"
+        />
+        <div class="content">
+          <div class="left">
+            <p class="title">Special field</p>
+            <hr />
+            <p class="tips">There's still time to go</p>
+            <div class="countBox">
+              <span class="time">{{ h }}</span>
+              <span>:</span>
+              <span class="time">{{ m }}</span>
+              <span>:</span>
+              <span class="time">{{ s }}</span>
+            </div>
+            <div class="allBtn">Look at all ></div>
+          </div>
+          <ul class="right" style="float:right">
+            <li v-for="(item, index) in goodsList.slice(0, 4)" :key="item.id">
+              <el-image
+                class="leftImg"
+                :fit="'cover'"
+                :src="item.img"
+                lazy
+              ></el-image>
+              <div class="rightBox">
+                <p
+                  class="goodsName ellipsis"
+                  @click="navTo('/mall/goods/' + item.id)"
+                >
+                  {{ item.name }}
+                </p>
+                <div class="less">
+                  <span class="lessBar"></span>
+                  <span class="lessNum">还剩86件</span>
+                </div>
+                <div class="price">
+                  <span class="nowPrice">限时价¥{{ item.price }}</span>
+                  <span class="beforePrice">原价¥{{ item.price + 60 }}</span>
+                </div>
+                <div class="buyBtn" @click="navTo('/mall/goods/' + item.id)">
+                  立即抢购
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+      <!-- 人气推荐 -->
+      <!-- <section class="hotGoods section">
+        <SectionHeader
+          title="人气推荐"
+          tips="最火最潮商品，为您挑选"
+          moreText="更多推荐>"
+        />
+        <div class="content">
+          <ul class="left">
+            <GoodsItem
+              :id="goodsList[0].id"
+              :img="goodsList[0].img"
+              :name="goodsList[0].name"
+              :price="goodsList[0].price"
+            />
+          </ul>
+          <ul class="right">
+            <GoodsItem
+              v-for="(item, index) in goodsList.slice(3, 9)"
+              :style="{ marginBottom: index <= 2 ? '10px' : '0px' }"
+              :key="+item.id"
+              :id="item.id"
+              :img="item.img"
+              :name="item.name"
+              :price="item.price"
+            />
+          </ul>
+        </div>
+      </section> -->
+      <section class="maker section">
+        <SectionHeader
+          :title="$t('index.bBrand-manufacturer')"
+          :tips="$t('index.bBrand-manufacturer-info')"
+          :moreText="$t('index.bBrand-manufacturer-more') + '>'"
+        />
+        <div class="content">
+          <ZoomImg
+            imgSrc="http://yanxuan.nosdn.127.net/0266209ded1751f599fe0dc21bb33e02.jpg"
+            class="left"
+          >
+            <div class="makerInfo" slot="otherEle">
+              <p class="large">Adidas制造商</p>
+              <hr />
+              <p class="small">35元起</p>
+            </div>
+          </ZoomImg>
+          <ZoomImg
+            imgSrc="http://yanxuan.nosdn.127.net/7cd0c8ed77da498090fb67c288ef05be.jpg"
+            class="center"
+          >
+            <div class="makerInfo" slot="otherEle">
+              <p class="large">UGG制造商</p>
+              <hr />
+              <p class="small">129元起</p>
+            </div>
+          </ZoomImg>
+          <div class="right">
+            <ZoomImg
+              imgSrc="http://yanxuan.nosdn.127.net/d824afe357e61fbee097412c5894c6ce.jpg"
+            >
+              <div class="makerInfo" slot="otherEle">
+                <p class="large">新秀丽制造商</p>
+                <hr />
+                <p class="small">49元起</p>
+              </div>
+            </ZoomImg>
+            <ZoomImg
+              imgSrc="http://yanxuan.nosdn.127.net/cf5f4a0d110ca17b9e0a80e6f7e6184b.jpg"
+            >
+              <div class="makerInfo" slot="otherEle">
+                <p class="large">MUJI制造商</p>
+                <hr />
+                <p class="small">12.9元起</p>
+              </div>
+            </ZoomImg>
+          </div>
+        </div>
+      </section>
+      <section
+        class="typeSection section"
+        v-for="(item, index) in typeList.slice(1)"
+        :key="item.id"
+        v-if="filterGoodsByType(item.id).length"
+      >
+        <SectionHeader
+          :title="item.name"
+          tips=""
+          moreText="查看更多>"
+          @click.native="selectType(item.id)"
+        />
+        <ul class="content">
+          <GoodsItem
+            v-for="(item, index) in filterGoodsByType(item.id).slice(0, 4)"
+            :style="{ marginRight: (index + 1) % 4 === 0 ? '0px' : '25px' }"
+            :key="+item.id"
+            :id="item.id"
+            :img="item.img"
+            :name="item.name"
+            :price="item.price"
+          />
+        </ul>
+      </section>
+    </div>
   </div>
 </template>
 
@@ -183,7 +203,6 @@ import SectionHeader from "../../components/SectionHeader";
 import ZoomImg from "../../components/ZoomImg";
 import GoodsItem from "../../components/GoodsItem";
 import Slick from "../../components/Slick";
-import FadeSwiper from "../../components/FadeSwiper";
 
 import { getClientSize, getScrollWidth } from "../../util/util";
 
@@ -193,14 +212,9 @@ export default {
     SectionHeader,
     ZoomImg,
     GoodsItem,
-    Slick,
-    FadeSwiper
+    Slick
   },
-  computed: {
-    clientWidth() {
-      return getClientSize().width - getScrollWidth() + "px";
-    }
-  },
+  computed: {},
   data() {
     return {
       typeList: [],
@@ -212,9 +226,11 @@ export default {
       m: 0,
       s: 0,
       bannnerData: [
-        "http://www.ga-me.com/upload/2019/01/51e287a5d64e9bfd7ae80563b15a9a60.jpg",
-        "http://www.ga-me.com/upload/2016/12/5ef211a8ce3884205495d38ec02f3059.jpg",
-        "http://www.ga-me.com/upload/2017/06/caf59b9f1e3bc874ff25af49f6fc902b.jpg"
+        "https://wegame.gtimg.com/g.2000918-r.85c9f/adm/15760604224167.jpeg",
+        "https://wegame.gtimg.com/g.2000717-r.2feb0/adm/15761422713882.jpeg?nosharpp=1",
+        "https://wegame.gtimg.com/g.17-r.3bcfb/adm/15759588014167.jpeg?nosharpp=1",
+        "https://images-1.gog.com/6e36da960c022ae1fe984b4617a326a46d9567afba0b5e0f6046b0cc6c6991a2_bs_logo_big_2x.webp",
+        "https://wegame.gtimg.com/g.2000931-r.46a1c/adm/15760310093882.jpeg"
       ]
     };
   },
@@ -402,6 +418,7 @@ export default {
             width: 240px;
             height: 100%;
             overflow: hidden;
+            padding: 15px;
             .goodsName {
               font-size: 15px;
               cursor: pointer;
@@ -439,7 +456,7 @@ export default {
               }
             }
             .buyBtn {
-              margin-top: 16px;
+              margin-top: 30px;
               width: 120px;
               height: 30px;
               color: white;

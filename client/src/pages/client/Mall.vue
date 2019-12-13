@@ -3,41 +3,40 @@
     <header>
       <div class="container clear">
         <span class="title" @click="navTo('/mall')"
-          >爱玩-游戏商城 一站式游戏平台</span
-        >
-        <NoticeList :notices="notices" />
-        <div class="right" v-if="clientToken">
-          <span class="name">欢迎您，{{ clientName }}</span>
-          <span @click="navTo('/mall/personal')">个人中心</span>
-          <span @click="logout">退出登录</span>
-        </div>
-        <div class="right" v-else>
+          >{{ $t("system.title") }}——{{ $t("system.info") }}
+        </span>
+        <!-- <NoticeList :notices="notices" /> -->
+
+        <div class="right">
           <div class="searchBox">
-            <!-- <TipsInput
+            <el-input
               placeholder="请输入商品关键字"
-              :tips="tips"
-              @tipsChosen="searchTip"
-              ref="TipsInput"
               v-model="searchText"
-            />
-            <i class="iconfont icon-search" @click="searchConfirm" /> -->
-            <el-input placeholder="请输入商品关键字" v-model="searchText">
-              <!-- <el-select v-model="select" slot="prepend" placeholder="请选择">
-                <el-option label="餐厅名" value="1"></el-option>
-                <el-option label="订单号" value="2"></el-option>
-                <el-option label="用户电话" value="3"></el-option>
-              </el-select> -->
+              class="search-item"
+            >
               <el-button
                 slot="append"
                 icon="el-icon-search"
+                type="warning"
                 @click="searchConfirm"
               ></el-button>
             </el-input>
           </div>
-          <div class="system">
-            <span @click="navTo('/login')">登录</span>
-            <span @click="navTo('/login')">注册</span>
-          </div>
+          <template v-if="clientToken">
+            <span class="name"
+              >{{ $t("system.Welcome") }}，{{ clientName }}</span
+            >
+            <span @click="navTo('/mall/personal')">{{
+              $t("system.My-ZOE")
+            }}</span>
+            <span @click="logout">{{ $t("system.log-out") }}</span>
+          </template>
+          <template v-else>
+            <div class="system">
+              <span @click="navTo('/login')">{{ $t("system.login") }}</span>
+              <span @click="navTo('/login')">{{ $t("system.register") }}</span>
+            </div>
+          </template>
         </div>
       </div>
     </header>
@@ -46,28 +45,27 @@
         <router-view></router-view>
       </div>
       <div class="fixedAd">
-        <!-- <img src="../../assets/img/index2.gif" alt="" /> -->
         <ul class="fixedList">
           <li>
             <i class="iconfont icon-collection_fill" />
-            <span>新人有礼</span>
+            <span>The couple and polite</span>
           </li>
           <li>
             <i class="iconfont icon-paixing-copy" />
-            <span>热门商品</span>
+            <span>Hot commodity</span>
           </li>
           <li>
             <i class="iconfont icon-fabulous" />
-            <span>用户反馈</span>
+            <span>User feedback</span>
           </li>
           <li @click="backToTop" v-show="shouldShowBT">
             <i class="iconfont icon-arrows-4-7" />
-            <span>回顶部</span>
+            <span>Return to the top</span>
           </li>
         </ul>
       </div>
     </div>
-    <div class="bottomInfo">
+    <!-- <div class="bottomInfo">
       <div class="container">
         <div class="service footerItem">
           <p class="title">客户服务</p>
@@ -101,7 +99,7 @@
           <span>下载领1000元新人礼包</span>
         </div>
       </div>
-    </div>
+    </div> -->
     <footer>
       <div class="container">
         <ul class="footerTop">
@@ -110,39 +108,40 @@
               src="//yanxuan.nosdn.127.net/e6021a6fcd3ba0af3a10243b7a2fda0d.png"
               alt=""
             />
-            <span>30天无忧退换货</span>
+            <span>Free return and exchange within 30 days</span>
           </li>
           <li>
             <img
               src="//yanxuan.nosdn.127.net/e09c44e4369232c7dd2f6495450439f1.png"
               alt=""
             />
-            <span>满88元免邮费</span>
+            <span>And buy and send activation codes</span>
           </li>
           <li>
             <img
               src="//yanxuan.nosdn.127.net/e72ed4de906bd7ff4fec8fa90f2c63f1.png"
               alt=""
             />
-            <span>XX品质保证</span>
+            <span>Game copyright guarantee</span>
           </li>
         </ul>
         <div class="footerBottom">
           <ul>
-            <li>关于我们</li>
-            <li>帮助中心</li>
-            <li>售后服务</li>
-            <li>配送与验收</li>
-            <li>商务合作</li>
-            <li>企业采购</li>
-            <li>开放平台</li>
-            <li>搜索推荐</li>
-            <li>友情链接</li>
+            <li>About us</li>
+            <li>Help center</li>
+            <li>After-sales service</li>
+            <li>Distribution and acceptance</li>
+            <li>Business cooperation</li>
+            <li>Enterprise procurement</li>
+            <li>Open platform</li>
+            <li>The search is recommended</li>
+            <li>link</li>
           </ul>
-          <p>XX公司版权所有 © 1996-2018 食品经营许可证：XXXXXXXXXXXXXXXXX</p>
+          <p>XXCopyright © 1996-2018 all rights reserved:XXXXXXXXXXXXXXXXX</p>
         </div>
       </div>
     </footer>
+    <div class="bg"></div>
   </div>
 </template>
 
@@ -238,13 +237,22 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import "../../assets/css/var.less";
+@import "~@/assets/css/var.less";
 .Mall {
   width: 100%;
+  .bg {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: url("~@/assets/img/bg.jpg") center;
+    z-index: -1;
+  }
   header {
     width: 100%;
     min-width: 1200px;
-    background-color: #333333;
+    background-color: #191919;
     height: 38px;
     color: @fontShallowColor;
     user-select: none;
@@ -255,7 +263,8 @@ export default {
     .container {
       position: relative;
       height: 38px;
-
+      max-width: 1200px;
+      margin: 0 auto;
       .title {
         position: absolute;
         left: 0;
@@ -289,6 +298,10 @@ export default {
         .searchBox {
           display: inline-block;
         }
+        .search-item {
+          border-radius: 30px;
+          overflow: hidden;
+        }
       }
     }
   }
@@ -297,18 +310,12 @@ export default {
   }
   .fixedAd {
     position: fixed;
-    z-index: 1;
     right: 0;
     top: 108px;
-    width: 72px;
-    img {
-      display: block;
-      width: 100%;
-      height: 154px;
-    }
+    width: 52px;
     .fixedList {
       margin-top: 2px;
-      background-color: white;
+      background-color: #ffffff52;
       width: 100%;
       li {
         width: 100%;
@@ -319,12 +326,12 @@ export default {
         padding-top: 12px;
         i {
           display: block;
-          font-size: 30px;
+          font-size: 24px;
           color: #666666;
         }
         span {
           display: block;
-          font-size: 14px;
+          font-size: 12px;
           color: #666666;
           margin-top: 4px;
         }
@@ -420,9 +427,10 @@ export default {
     }
   }
   footer {
+    margin-top: 50px;
     width: 100%;
     height: 208px;
-    background-color: #414141;
+    background-color: #191919;
     color: white;
     overflow: hidden;
     .footerTop {
@@ -461,6 +469,7 @@ export default {
       }
       p {
         margin-top: 5px;
+        padding: 5px;
       }
     }
   }

@@ -1,22 +1,24 @@
 <template>
   <div class="Cart">
-    <div v-if="orderList.length>0">
+    <div v-if="orderList.length > 0">
       <div class="cartTableHeader">
-        <span>商品信息</span>
-        <span>单价</span>
-        <span>数量</span>
-        <span>小计</span>
-        <span>交易操作</span>
+        <span>{{ $t("cart.Blurb") }}</span>
+        <span>{{ $t("cart.Bluunit-pricerb") }}</span>
+        <span>{{ $t("cart.amount") }}</span>
+        <span>{{ $t("cart.subtotal") }}</span>
+        <span>{{ $t("cart.operation") }}</span>
       </div>
       <ul class="orderList">
-        <li v-for="(item,index) in orderList" :key="'order'+item.id">
+        <li v-for="(item, index) in orderList" :key="'order' + item.id">
           <div class="orderDetail">
             <img :src="item.goods.img" alt="商品图片" />
             <div class="goodsName">
-              <p @click="navTo('/mall/goods/'+item.goods.id)">{{item.goods.name}}</p>
-              <span>{{item.goods.spec}}</span>
+              <p @click="navTo('/mall/goods/' + item.goods.id)">
+                {{ item.goods.name }}
+              </p>
+              <span>{{ item.goods.spec }}</span>
             </div>
-            <span class="unitPrice">{{'￥'+item.goods.unitPrice}}</span>
+            <span class="unitPrice">{{ "￥" + item.goods.unitPrice }}</span>
             <span class="num">
               <NumberInput
                 @changeHandle="numberChange(item.id)"
@@ -27,131 +29,131 @@
               />
             </span>
             <!-- <input @change="numberChange(item.id)" type="text" v-model="item.temGoodsNum" min="1" class="numInput" /> -->
-            <span class="amount">{{'￥'+item.amount}}</span>
-            <button @click="deleteOrder(item.id)">删除</button>
+            <span class="amount">{{ "￥" + item.amount }}</span>
+            <button @click="deleteOrder(item.id)">
+              {{ $t("public.delete") }}
+            </button>
           </div>
         </li>
       </ul>
       <div class="cartFooter">
-        <span>应付金额：</span>
-        <span class="total">{{'￥'+totalAmount}}</span>
-        <button @click="settleAccounts">下单</button>
+        <span>{{ $t("cart.amount-payable") }}：</span>
+        <span class="total">{{ "￥" + totalAmount }}</span>
+        <button @click="settleAccounts">{{ $t("public.pay") }}</button>
       </div>
     </div>
-    <p class="emptyTips" v-else>购物车还是空滴~</p>
+    <p class="emptyTips" v-else>{{ $t("cart.info") }}</p>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import {getOrderByState,deleteOrder,settleAccounts} from '../../api/client';
-import NumberInput from '../../components/NumberInput';
+import { mapGetters } from "vuex";
+import { getOrderByState, deleteOrder, settleAccounts } from "../../api/client";
+import NumberInput from "../../components/NumberInput";
 
 export default {
-  name: 'Cart',
-  components:{
+  name: "Cart",
+  components: {
     NumberInput
   },
-  computed:{
-    ...mapGetters([
-      'clientToken'
-    ]),
-    totalAmount(){
+  computed: {
+    ...mapGetters(["clientToken"]),
+    totalAmount() {
       let amount = 0;
-      this.orderList.map((item,index)=>{
-        amount+=item.amount;
-      })
+      this.orderList.map((item, index) => {
+        amount += item.amount;
+      });
       return amount;
     }
   },
-  data () {
+  data() {
     return {
-      orderList:[],
-    }
+      orderList: []
+    };
   },
 
-  methods:{
-    getOrderByState(state){
-      const res = getOrderByState(state,this.clientToken);
+  methods: {
+    getOrderByState(state) {
+      const res = getOrderByState(state, this.clientToken);
       res
-      .then((data)=>{
-        this.orderList=data;
-        this.orderList.map((item,index)=>{
-          item.temGoodsNum = item.goodsNum;
+        .then(data => {
+          this.orderList = data;
+          this.orderList.map((item, index) => {
+            item.temGoodsNum = item.goodsNum;
+          });
         })
-      })
-      .catch((e)=>{
-       this.$message.error(e)
-      })
+        .catch(e => {
+          this.$message.error(e);
+        });
     },
-    numberChange(orderId){
-      this.orderList.map((item,index)=>{
-        if(orderId===item.id){
-          item.amount = item.temGoodsNum*item.goods.unitPrice;
-      console.log(item.temGoodsNum,item.goods.unitPrice)
+    numberChange(orderId) {
+      this.orderList.map((item, index) => {
+        if (orderId === item.id) {
+          item.amount = item.temGoodsNum * item.goods.unitPrice;
+          console.log(item.temGoodsNum, item.goods.unitPrice);
         }
-      })
+      });
     },
-    deleteOrder(orderId){
+    deleteOrder(orderId) {
       const res = deleteOrder(orderId);
       res
-      .then(()=>{
-        this.$message.success('删除订单成功！')
-        this.orderList.map((item,index)=>{
-          if(item.id===orderId){
-            this.orderList.splice(index,1);
-          }
+        .then(() => {
+          this.$message.success("删除订单成功！");
+          this.orderList.map((item, index) => {
+            if (item.id === orderId) {
+              this.orderList.splice(index, 1);
+            }
+          });
         })
-      })
-      .catch((e)=>{
-       this.$message.error(e)
-      })
+        .catch(e => {
+          this.$message.error(e);
+        });
     },
-    navTo(route){
+    navTo(route) {
       this.$router.push(route);
     },
-    settleAccounts(){
+    settleAccounts() {
       let cartList = [];
-      this.orderList.map((item,index)=>{
+      this.orderList.map((item, index) => {
         cartList.push({
-          id:item.id,
-          goodsNum:item.temGoodsNum,
-          amount:item.amount
-        })
+          id: item.id,
+          goodsNum: item.temGoodsNum,
+          amount: item.amount
+        });
       });
       const res = settleAccounts({
-        cartList:cartList
+        cartList: cartList
       });
       res
-      .then(()=>{
-        this.$message.success('下单成功！')
-        this.orderList = [];
-      })
-      .catch((e)=>{
-       this.$message.error(e)
-      })
+        .then(() => {
+          this.$message.success("下单成功！");
+          this.orderList = [];
+        })
+        .catch(e => {
+          this.$message.error(e);
+        });
     }
   },
 
-  mounted(){
+  mounted() {
     this.getOrderByState(0);
-  },
-}
+  }
+};
 </script>
 
 <style scoped lang="less">
 @import "../../assets/css/var.less";
-.Cart{
+.Cart {
   width: 100%;
-  .emptyTips{
-      width: 200px;
-      text-align: center;
-      display: block;
-      margin: 30px auto;
-      color:@thirdColor;
-      font-size: 20px;
+  .emptyTips {
+    width: 200px;
+    text-align: center;
+    display: block;
+    margin: 30px auto;
+    color: @thirdColor;
+    font-size: 20px;
   }
-  .cartTableHeader{
+  .cartTableHeader {
     width: 100%;
     height: 40px;
     background-color: #f5f5f5;
@@ -159,62 +161,65 @@ export default {
     color: @fontDefaultColor;
     font-size: 14px;
     line-height: 40px;
-    span{
+    span {
       display: inline-block;
       width: 14%;
-      &:first-child{
-        width:40%;
+      &:first-child {
+        width: 40%;
         text-align: center;
       }
     }
   }
-  .orderList{
+  .orderList {
     width: 100%;
-    li{
+    li {
       border: 1px solid @borderColor;
       border-top: none;
       font-size: 13px;
-      .orderHeader{
+      .orderHeader {
         background-color: #f1f1f1;
         height: 40px;
         line-height: 40px;
         padding: 0 5px;
-        .orderTime{
+        .orderTime {
           font-weight: 600;
         }
-        .orderId,.state{
+        .orderId,
+        .state {
           margin-left: 10px;
         }
       }
-      .orderDetail{
+      .orderDetail {
         width: 100%;
         padding: 10px;
         position: relative;
         overflow: hidden;
-        img{
+        img {
           width: 84px;
           height: 84px;
           display: inline-block;
         }
-        .goodsName{
+        .goodsName {
           display: inline-block;
           margin-left: 5px;
           width: 230px;
           vertical-align: top;
-          p{
+          p {
             cursor: pointer;
             line-height: 20px;
-            &:hover{
-              text-decoration:underline;
+            &:hover {
+              text-decoration: underline;
             }
           }
-          span{
-            color:@fontDefaultColor;
+          span {
+            color: @fontDefaultColor;
             display: block;
             margin-top: 10px;
           }
         }
-        .unitPrice,.num,.amount{
+        .unitPrice,
+        .num,
+        .amount {
           display: inline-block;
           vertical-align: top;
           width: 15%;
@@ -222,11 +227,11 @@ export default {
           line-height: 85px;
           text-align: center;
         }
-        .NumberInput{
+        .NumberInput {
           position: relative;
           top: 25px;
         }
-        button{
+        button {
           position: absolute;
           right: 90px;
           bottom: 40px;
@@ -234,14 +239,13 @@ export default {
           height: 30px;
           border-radius: 3px;
           background-color: @falseColor;
-          color:white;
+          color: white;
           border: none;
-
         }
       }
     }
   }
-  .cartFooter{
+  .cartFooter {
     width: 100%;
     height: 60px;
     line-height: 60px;
@@ -250,17 +254,17 @@ export default {
     border-top: none;
     background-color: #f5f5f5;
     position: relative;
-    span{
+    span {
       color: @fontDefaultColor;
       display: inline-block;
       vertical-align: top;
     }
-    .total{
-      color:@falseColor;
+    .total {
+      color: @falseColor;
       font-size: 25px;
       font-weight: 600;
     }
-    button{
+    button {
       position: absolute;
       right: 0;
       top: 0;
@@ -268,7 +272,7 @@ export default {
       height: 100%;
       background-color: @thirdColor;
       border: none;
-      color:white;
+      color: white;
       font-size: 20px;
     }
   }

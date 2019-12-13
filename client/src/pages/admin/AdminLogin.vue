@@ -4,23 +4,28 @@
     :style="{ width: width + 'px', height: height + 'px' }"
   >
     <div class="content">
-      <h3>爱玩-游戏商城</h3>
-      <P>后台管理系统</P>
-      <input ref="account" type="text" placeholder="账号" />
-      <input ref="pwd" type="password" placeholder="密码" />
-      <button @click="login">登录</button>
+      <h3>{{ $t("login.title") }}</h3>
+      <P
+        >{{ $t("login.systemInfo") }} |
+        <span @click="onChangeLanguage">{{ language }}</span>
+      </P>
+      <input ref="account" type="text" :placeholder="$t('login.account')" />
+      <input ref="pwd" type="password" :placeholder="$t('login.pwd')" />
+      <button @click="login">{{ $t("login.login") }}</button>
     </div>
   </div>
 </template>
 
 <script>
-import { mapMutations, mapActions } from "vuex";
+import { mapMutations, mapActions, mapGetters } from "vuex";
 import { getClientSize } from "../../util/util";
 import { login } from "../../api/admin";
+import { setup as languageSetup } from "@/locales/admin";
 
 export default {
   name: "AdminLogin",
   computed: {
+    ...mapGetters(["language"]),
     width() {
       return getClientSize().width;
     },
@@ -46,9 +51,20 @@ export default {
       setAdminName: "SET_ADMIN_NAME",
       setAdminToken: "SET_ADMIN_TOKEN"
     }),
+    onChangeLanguage() {
+      languageSetup(this.language == "zh" ? "en" : "zh");
+      this.$store.dispatch(
+        "app/changeLanguage",
+        this.language == "zh" ? "en" : "zh"
+      );
+    },
     login() {
       const account = this.$refs.account.value;
       const pwd = this.$refs.pwd.value;
+      if (!!!account || !!!pwd) {
+        this.$message.error(this.$t("message.info"));
+        return;
+      }
       const res = login({
         account: account,
         pwd: pwd
@@ -60,7 +76,7 @@ export default {
           this.$router.push({ path: this.redirect || "/" });
         })
         .catch(e => {
-          this.$message.error(e)
+          this.$message.error(e);
         });
     }
   }

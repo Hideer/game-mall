@@ -1,0 +1,84 @@
+{
+  "layout": {
+    "表盘": "Dashboard",
+    "会员管理": "Member",
+    "商品管理": "Goods",
+    "商品列表": "GoodsList",
+    "订单管理": "OrderForm",
+    "订单列表": "OrderList",
+    "评论管理": "Comment",
+    "系统管理": "System",
+    "修改资料": "Material",
+    "登出": "Logout"
+  },
+  "login": {
+    "title": "LovePlay-mall",
+    "systemInfo": "back-office system",
+    "account": "account",
+    "pwd": "pwd",
+    "login": "login"
+  },
+  "modifyUser": {
+    "原密码": "oldPwd:",
+    "新密码": "newPwd:",
+    "确认新密码": "newPwd again:"
+  },
+  "Member": {
+    "UserID": "UserID",
+    "Email": "Email",
+    "Niickname": "Nickname",
+    "Recipient": "recipient",
+    "Address": "Address",
+    "Phone": "Phone",
+    "MemberInfo": "MemberInfo"
+  },
+  "Goods": {
+    "addNewGood": "addNewGood",
+    "addGoodType": "AddGoodType",
+    "请输入类目名称": "Please enter category",
+    "GoodsName": "GoodsName",
+    "TemType": "TemType",
+    "GoodsImg": "GoodsImg",
+    "SpecDetail": "SpecDetail",
+    "Inventory": "Inventory",
+    "price": "price",
+    "Desc": "Desc",
+    "请输入规格名称": "Please enter specification",
+    "请输入库存量": "Please enter inventory",
+    "请输入单价": "Please enter unit price",
+    "添加规格": "Add the specification"
+  },
+  "Orders": {
+    "All": "All",
+    "Non-pay": "Non-pay",
+    "Unshipped": "Unshipped",
+    "Shipped": "Shipped",
+    "Received": "Received",
+    "goods-id": "GoodsId",
+    "goods-state": "state",
+    "goods": "Goods",
+    "goods-amount": "Amount",
+    "goods-spec": "Spec",
+    "goods-num": "Number",
+    "update-time": "Up-Time",
+    "noReply":"noReply",
+    "replied":"replied",
+    "reply":"reply",
+    "response":"response",
+    "Message-reply":"Message-reply"
+  },
+  "public": {
+    "confirm": "confirm",
+    "reset": "reset",
+    "modify": "modify",
+    "delete": "delete",
+    "cancel": "cancel",
+    "edit": "edit",
+    "add": "add",
+    "save": "save",
+    "return": "return"
+  },
+  "message": {
+    "info":"Please enter the correct information"
+  }
+}

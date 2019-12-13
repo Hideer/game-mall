@@ -32,17 +32,20 @@
                     type="primary"
                     plain
                     @click="navTo('/goods/' + item.id)"
-                    >编辑</el-button
-                  >
-                  <el-button type="danger" plain @click="deleteGoods(item.id)"
-                    >删除</el-button
+                    >{{ $t("public.edit") }}
+                  </el-button>
+                  <el-button
+                    type="danger"
+                    plain
+                    @click="deleteGoods(item.id)"
+                    >{{ $t("public.delete") }}</el-button
                   >
                 </div>
               </li>
               <li>
                 <div class="addGoods" @click="navTo('/goods/new')">
                   <i class="el-icon-circle-plus"></i>
-                  点击增加商品
+                  {{ $t("Goods.addNewGood") }}
                 </div>
               </li>
             </ul>
@@ -53,10 +56,10 @@
         <NoData />
       </template>
     </el-tabs>
-    <Popup title="增加类目" @popupClose="closePopup" v-show="popupShow">
+    <Popup :title="$t('Goods.addGoodType')" @popupClose="closePopup" v-show="popupShow">
       <div class="popupContent" slot="popupContent">
-        <input type="text" ref="typeInput" placeholder="请输入类目名称" />
-        <button @click="addConfirm">确认</button>
+        <input type="text" ref="typeInput" :placeholder="$t('Goods.请输入类目名称')" />
+        <button @click="addConfirm">{{ $t('public.confirm') }}</button>
       </div>
     </Popup>
   </div>

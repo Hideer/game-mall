@@ -39,7 +39,7 @@ router.get('/api/admin/repliedMsg', msgAdmin.getRepliedMsg)
 //回复信息
 router.post('/api/admin/reply', msgAdmin.reply)
 
-//获取订单s
+//获取订单
 router.get('/api/admin/orders', orderAdmin.getOrders)
 
 //获取订单一些可供修改的信息

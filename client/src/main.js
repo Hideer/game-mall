@@ -3,6 +3,7 @@ import Vue from "vue";
 import App from "./App";
 import router from "./router/client";
 import store from "./store";
+import i18n from "./locales/client";
 
 import "./assets/css/common.less";
 import "./assets/font/iconfont.css";
@@ -22,5 +23,6 @@ new Vue({
   router,
   store,
   template: "<App/>",
-  components: { App }
+  components: { App },
+  i18n
 });

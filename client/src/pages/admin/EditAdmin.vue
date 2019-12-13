@@ -1,18 +1,18 @@
 <template>
   <div class="EditAdmin container-box-public">
     <el-form ref="modifyAdminForm" :model="modifyAdminForm" style="width:300px">
-      <el-form-item label="原密码：" prop="oldPwd">
+      <el-form-item :label="$t('modifyUser.原密码')" prop="oldPwd">
         <el-input v-model="modifyAdminForm.oldPwd" show-password></el-input>
       </el-form-item>
-      <el-form-item label="新密码：" prop="newPwd">
+      <el-form-item :label="$t('modifyUser.新密码')" prop="newPwd">
         <el-input v-model="modifyAdminForm.newPwd" show-password></el-input>
       </el-form-item>
-      <el-form-item label="确认新密码：" prop="confirmPwd">
+      <el-form-item :label="$t('modifyUser.确认新密码')" prop="confirmPwd">
         <el-input v-model="modifyAdminForm.confirmPwd" show-password></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="confirmChange">确认修改</el-button>
-        <el-button @click="resetForm('modifyAdminForm')">重置</el-button>
+        <el-button type="primary" @click="confirmChange">{{ $t('public.confirm') }}</el-button>
+        <el-button @click="resetForm('modifyAdminForm')">{{ $t('public.reset') }}</el-button>
       </el-form-item>
     </el-form>
   </div>

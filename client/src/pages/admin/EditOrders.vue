@@ -2,26 +2,16 @@
   <div class="EditOrders container-box-public">
     <div class="content">
       <el-form ref="form" :model="ordersForm" label-width="100px">
-        <el-form-item label="订单号:">
+        <el-form-item :label="$t('Orders.goods-id')">
           <span class="val">{{ id }}</span>
         </el-form-item>
-        <el-form-item label="商品名称：">
+        <el-form-item :label="$t('Goods.GoodsName')">
           <span class="val">{{ goods }}</span>
         </el-form-item>
-        <el-form-item label="总金额：">
+        <el-form-item :label="$t('Orders.goods-amount')">
           <span class="val">{{ "¥ " + amount }}</span>
         </el-form-item>
-        <el-form-item label="规格：">
-          <!-- <Radio
-            v-for="(item, index) in spec"
-            :key="item.id"
-            v-model="temSpecId"
-            :initVal="temSpecId"
-            radioName="spec"
-            :radioVal="item.id"
-          >
-            <span class="tips" slot="tips">{{ item.specName }}</span>
-          </Radio> -->
+        <el-form-item :label="$t('Orders.goods-spec')">
           <el-radio-group v-model="temSpecId" size="small">
             <el-radio-button
               v-for="item in spec"
@@ -31,15 +21,14 @@
             >
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="数量：">
+        <el-form-item :label="$t('Orders.goods-num')">
           <el-input-number
             v-model.trim.number="temNum"
             :min="1"
             :max="999"
-            label="库存量"
           ></el-input-number>
         </el-form-item>
-        <el-form-item label="订单状态：">
+        <el-form-item :label="$t('Orders.goods-state')">
           <el-radio-group v-model="temStateId" size="small">
             <el-radio-button
               v-for="item in states"
@@ -50,42 +39,12 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="saveChange">保存修改</el-button>
-          <el-button @click="back">返回</el-button>
+          <el-button type="primary" @click="saveChange">{{
+            $t("public.save")
+          }}</el-button>
+          <el-button @click="back">{{ $t("public.return") }}</el-button>
         </el-form-item>
       </el-form>
-      <!-- <div class="inputBox">
-        <span>订单号：</span>
-        <span class="val">{{id}}</span>
-      </div>
-      <div class="inputBox">
-        <span>商品名称：</span>
-        <span class="val">{{goods}}</span>
-      </div>
-      <div class="inputBox">
-        <span>总金额：</span>
-        <span class="val">{{'¥'+amount}}</span>
-      </div>
-      <div class="inputBox">
-        <span>规格：</span>
-        <Radio v-for="(item,index) in spec" :key="item.id" v-model="temSpecId" :initVal="temSpecId" radioName="spec" :radioVal="item.id">
-          <span class="tips" slot="tips">{{item.specName}}</span>
-        </Radio>
-      </div>
-      <div class="inputBox">
-        <span>数量：</span>
-        <NumberInput v-model="temNum" :initNum="temNum" :min="1" :max="999"/>
-      </div>
-      <div class="inputBox">
-        <span>订单状态：</span>
-        <Radio v-for="(item,index) in states" :key="item.id" v-model="temStateId" :initVal="temStateId" radioName="state" :radioVal="item.id">
-          <span class="tips" slot="tips">{{item.name}}</span>
-        </Radio>
-      </div>
-      <div class="btnBox">
-        <button class="confirmBtn" @click="saveChange">保存修改</button>
-        <button class="normalBtn" @click="back">返回</button>
-      </div> -->
     </div>
   </div>
 </template>
@@ -158,9 +117,9 @@ export default {
       });
       res
         .then(() => {
-          this.$message.success('修改成功')
+          this.$message.success("修改成功");
           this.fetchOrderDetail(this.$route.params.id);
-          this.back()
+          this.back();
         })
         .catch(e => {
           this.$message.error(e);

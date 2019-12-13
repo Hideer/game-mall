@@ -13,14 +13,14 @@ exports.getOrders = async (req, res) => {
   try {
     let orders = []
     if (state === -1) {
-      orders = await OrderModel.find({}, null, { sort: {'updatetime': -1}})
+      orders = await OrderModel.find({}, null, { sort: { updatetime: -1 } })
     } else {
       orders = await OrderModel.find(
         {
           state: state
         },
         null,
-        { sort: {'updatetime': -1}}
+        { sort: { updatetime: -1 } }
       )
     }
     if (orders.length === 0) {
@@ -69,14 +69,7 @@ exports.getOrders = async (req, res) => {
         spec: spec.specName,
         num: order.goodsNum,
         amount: order.amount,
-        state:
-          order.state === 0
-            ? '未付款'
-            : order.state === 1
-            ? '未发货'
-            : order.state === 2
-            ? '已发货'
-            : '已到货',
+        state: order.state === 0 ? '未付款' : order.state === 1 ? '未发货' : order.state === 2 ? '已发货' : '已到货',
         time: moment(order.updatetime).format('MM-DD HH:mm')
       })
     }
@@ -87,7 +80,7 @@ exports.getOrders = async (req, res) => {
       })
     )
   } catch (e) {
-    console.log(e)
+    console.log('这是个什么结构', e)
     res.send(Util.returnMsg())
   }
 }
@@ -106,6 +99,7 @@ exports.getOrder = async (req, res) => {
     const spec = await GoodsDetailModel.findOne({
       id: order.goodsDetailId
     })
+    console.log(order,spec)
     const specs = await GoodsDetailModel.find({
       goodsId: spec.goodsId
     })
@@ -138,7 +132,7 @@ exports.getOrder = async (req, res) => {
       })
     )
   } catch (e) {
-    console.log(e)
+    console.log('这是gege ', e)
     res.send(Util.returnMsg())
   }
 }

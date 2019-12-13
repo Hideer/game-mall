@@ -1,7 +1,13 @@
 <template>
   <li class="GoodsItem">
     <div class="imgBox">
-      <el-image :src="img" fit="contain" style="width: 100%; height: 100%" lazy @click="navTo('/mall/goods/' + id)"></el-image>
+      <el-image
+        :src="img"
+        fit="cover"
+        style="width: 100%; height: 100%"
+        lazy
+        @click="navTo('/mall/goods/' + id)"
+      ></el-image>
     </div>
     <div class="goodsInfo">
       <span class="goodsName ellipsis" @click="navTo('/mall/goods/' + id)">{{
@@ -51,6 +57,7 @@ export default {
   width: 266px;
   height: 360px;
   overflow: hidden;
+  background-color: #fff;
   &:hover {
     img {
       transform: scale(1.05);

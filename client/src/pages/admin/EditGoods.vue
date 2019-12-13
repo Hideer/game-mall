@@ -1,7 +1,7 @@
 <template>
   <div class="EditGoods container-box-public">
-    <el-form ref="form" :model="goodsForm" label-width="80px">
-      <el-form-item label="商品名称">
+    <el-form ref="form" :model="goodsForm" label-width="100px">
+      <el-form-item :label="$t('Goods.GoodsName')">
         <el-input
           v-model="goodsForm.goodsName"
           placeholder="请输入商品名称"
@@ -9,7 +9,7 @@
           show-word-limit
         ></el-input>
       </el-form-item>
-      <el-form-item label="选择类目">
+      <el-form-item :label="$t('Goods.TemType')">
         <el-select v-model="goodsForm.temTypeId" placeholder="请选择类别">
           <el-option
             v-for="item in types"
@@ -19,34 +19,32 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="图片地址">
+      <el-form-item :label="$t('Goods.GoodsImg')">
         <el-input
           v-model="goodsForm.goodsImg"
           placeholder="请输入图片地址"
         ></el-input>
       </el-form-item>
-      <el-form-item label="规格详情">
+      <el-form-item :label="$t('Goods.SpecDetail')">
         <!-- <el-input v-model="goodsForm.goodsImg" placeholder="请输入图片地址"></el-input> -->
         <ul class="speclist-content">
           <li v-for="(item, index) in specList" :key="index">
             <el-input
               style="width:140px"
               v-model="item.specName"
-              placeholder="请输入规格名称"
+              :placeholder="$t('Goods.请输入规格名称')"
               maxlength="12"
               show-word-limit
             ></el-input>
-            <span>库存量：</span>
+            <span>{{ $t("Goods.Inventory") }}</span>
             <el-input-number
               v-model.trim.number="item.stockNum"
               :min="1"
-              label="库存量"
             ></el-input-number>
-            <span>价格：</span>
+            <span>{{ $t("Goods.price") }}</span>
             <el-input-number
               v-model.trim.number="item.unitPrice"
               :min="1"
-              label="价格￥"
             ></el-input-number>
             <el-button
               v-show="specList.length > 1"
@@ -54,14 +52,17 @@
               type="danger"
               icon="el-icon-delete"
               circle
-            ></el-button>
+            >
+            </el-button>
           </li>
           <li class="addSpec">
-            <el-button type="primary" @click="showPopup">添加规格</el-button>
+            <el-button type="primary" @click="showPopup">{{
+              $t("public.add")
+            }}</el-button>
           </li>
         </ul>
       </el-form-item>
-      <el-form-item label="详情描述">
+      <el-form-item :label="$t('Goods.Desc')">
         <el-input
           type="textarea"
           v-model="goodsForm.desc"
@@ -72,16 +73,34 @@
         ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="saveChange">保存修改</el-button>
-        <el-button @click="back">返回</el-button>
+        <el-button type="primary" @click="saveChange">{{
+          $t("public.save")
+        }}</el-button>
+        <el-button @click="back">{{ $t("public.return") }}</el-button>
       </el-form-item>
     </el-form>
-    <Popup title="添加规格" @popupClose="closePopup" v-show="popupShow">
+    <Popup
+      :title="$t('Goods.添加规格')"
+      @popupClose="closePopup"
+      v-show="popupShow"
+    >
       <div class="popupContent" slot="popupContent">
-        <input type="text" ref="specNameInput" placeholder="请输入规格名称" />
-        <input type="text" ref="stockNumInput" placeholder="请输入库存量" />
-        <input type="text" ref="priceInput" placeholder="请输入单价" />
-        <button @click="addConfirm">确认</button>
+        <input
+          type="text"
+          ref="specNameInput"
+          :placeholder="$t('Goods.请输入规格名称')"
+        />
+        <input
+          type="text"
+          ref="stockNumInput"
+          :placeholder="$t('Goods.请输入库存量')"
+        />
+        <input
+          type="text"
+          ref="priceInput"
+          :placeholder="$t('Goods.请输入单价')"
+        />
+        <button @click="addConfirm">{{ $t("public.confirm") }}</button>
       </div>
     </Popup>
   </div>

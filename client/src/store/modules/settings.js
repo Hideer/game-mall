@@ -1,9 +1,9 @@
 
 const state = {
-  showSettings: '管理系统 by ymc',
+  showSettings: "管理系统 by ymc",
   fixedHeader: false,
   sidebarLogo: false
-}
+};
 
 const mutations = {
   CHANGE_SETTING: (state, { key, value }) => {

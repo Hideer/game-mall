@@ -1,6 +1,10 @@
 /**
- * Created by PanJiaChen on 16/11/18.
+ * @Author: yu_meng_cheng@163.com
+ * @Date: 2019-12-12 23:11:51
+ * @Last Modified by:   yu_meng_cheng@163.com
+ * @Last Modified time: 2019-12-12 23:11:51
  */
+
 
 /**
  * Parse the time to string

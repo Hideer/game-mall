@@ -69,11 +69,9 @@ exports.changePwd = async (req, res) => {
   const pwdObj = req.body
   pwdObj.adminToken = jwt.decode(pwdObj.adminToken)
   try {
-    const adminOldPwd = await AdminModel.findOne(
-      {
-        id: pwdObj.adminToken
-      }
-    )
+    const adminOldPwd = await AdminModel.findOne({
+      id: pwdObj.adminToken
+    })
     if (adminOldPwd.pwd !== pwdObj.oldPwd) {
       res.send(Util.returnMsg('旧密码错误'))
       return
@@ -124,16 +122,16 @@ exports.searchUser = async (req, res) => {
   try {
     const users = await UserModel.find({
       $or: [
-        { email: word },
-        { phone: word },
-        // { nickname: { $like: '%' + word + '%' } },
-        // { recipient: { $like: '%' + word + '%' } },
-        // { address: { $like: '%' + word + '%' } }
+        { email: { $regex: new RegExp(word, 'i') } },
+        // { phone: { $regex: new RegExp(word, 'i') } },
+        { nickname: { $regex: new RegExp(word, 'i') } },
+        { recipient: { $regex: new RegExp(word, 'i') } },
+        { address: { $regex: new RegExp(word, 'i') } }
       ]
     })
     res.send(Util.returnSuccess({ data: users }))
   } catch (e) {
-    console.log(e);
+    console.log(e)
     res.send(Util.returnMsg())
   }
 }

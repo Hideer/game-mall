@@ -1,0 +1,84 @@
+{
+  "layout": {
+    "表盘": "表盘",
+    "会员管理": "会员管理",
+    "商品管理": "商品管理",
+    "商品列表": "商品列表",
+    "订单管理": "订单管理",
+    "订单列表": "订单列表",
+    "评论管理": "评论管理",
+    "系统管理": "系统管理",
+    "修改资料": "修改资料",
+    "登出": "登出"
+  },
+  "login": {
+    "title": "爱玩-游戏商城",
+    "systemInfo": "后台管理系统",
+    "account": "账户",
+    "pwd": "密码",
+    "login": "登录"
+  },
+  "modifyUser": {
+    "原密码": "原密码",
+    "新密码": "新密码",
+    "确认新密码": "确认新密码"
+  },
+  "Member": {
+    "UserID": "用户ID",
+    "Email": "邮箱",
+    "Niickname": "用户昵称",
+    "Recipient": "收件人",
+    "Address": "收货地址",
+    "Phone": "联系电话",
+    "MemberInfo": "会员信息"
+  },
+  "Goods": {
+    "addNewGood": "点击增加商品",
+    "addGoodType": "增加类目",
+    "请输入类目名称": "请输入类目名称",
+    "GoodsName": "商品名称",
+    "TemType": "选择类目",
+    "GoodsImg": "图片地址",
+    "SpecDetail": "规格详情",
+    "Inventory": "库存量",
+    "price": "价格",
+    "Desc": "详情描述",
+    "请输入规格名称": "请输入规格名称",
+    "请输入库存量": "请输入库存量",
+    "请输入单价": "请输入单价",
+    "添加规格": "添加规格"
+  },
+  "Orders": {
+    "All": "全部",
+    "Non-pay": "未付款",
+    "Unshipped": "未发货",
+    "Shipped": "已发货",
+    "Received": "已签收",
+    "goods-id": "订单号",
+    "goods-state": "订单状态",
+    "goods": "商品名",
+    "goods-amount": "订单金额",
+    "goods-spec": "规格",
+    "goods-num": "购买数量",
+    "update-time": "更新时间",
+    "noReply": "未回复",
+    "replied": "已回复",
+    "reply":"回复",
+    "response":"回复内容",
+    "Message-reply":"留言回复"
+  },
+  "public": {
+    "confirm": "确定",
+    "cancel": "取消",
+    "reset": "重置",
+    "modify": "修改",
+    "edit": "编辑",
+    "delete": "删除",
+    "add": "添加",
+    "save": "保存修改",
+    "return": "返回"
+  },
+  "message": {
+    "info": "请输入正确信息"
+  }
+}

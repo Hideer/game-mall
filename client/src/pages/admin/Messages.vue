@@ -1,45 +1,5 @@
 <template>
   <div class="Messages container-box-public">
-    <!-- <Tag :tagList="tags" @indexChange="changeTag" />
-    <div class="content">
-      <ul class="msgList" v-if="curIndex === 0">
-        <li
-          v-for="(item, index) in noReplyMsgList"
-          :key="'noReply' + item.id"
-          class="clear"
-        >
-          <img :src="item.user.headimg" alt="" />
-          <div class="info">
-            <span class="name">{{ item.user.name }}</span>
-            <div class="goods ellipsis">商品：{{ item.goods.name }}</div>
-            <p>{{ item.content }}</p>
-          </div>
-          <div class="operate">
-            <div>{{ item.time }}</div>
-            <button @click="reply(item.id)">回复</button>
-          </div>
-        </li>
-      </ul>
-      <ul class="msgList" v-else="curIndex === 1">
-        <li
-          v-for="(item, index) in repliedMsgList"
-          :key="'replied' + item.id"
-          class="clear"
-        >
-          <img :src="item.user.headimg" alt="" />
-          <div class="info">
-            <span class="name">{{ item.user.name }}</span>
-            <div class="goods ellipsis">商品：{{ item.goods.name }}</div>
-            <p>{{ item.content }}</p>
-            <p class="replyContent">{{ "回复内容：" + item.replyContent }}</p>
-          </div>
-          <div class="operate">
-            <div>{{ item.time }}</div>
-            <span>已回复</span>
-          </div>
-        </li>
-      </ul>
-    </div> -->
     <el-tabs v-model="activeName" @tab-click="changeTag" v-loading="loading">
       <el-tab-pane v-for="item in tags" :key="item" :label="item">
         <div class="content">
@@ -53,12 +13,16 @@
                 <img :src="item.user.headimg" alt="" />
                 <div class="info">
                   <span class="name">{{ item.user.name }}</span>
-                  <div class="goods ellipsis">商品：{{ item.goods.name }}</div>
+                  <div class="goods ellipsis">
+                    {{ $t("Orders.goods") }}：{{ item.goods.name }}
+                  </div>
                   <p>{{ item.content }}</p>
                 </div>
                 <div class="operate">
                   <div>{{ item.time }}</div>
-                  <button @click="reply(item.id)">回复</button>
+                  <button @click="reply(item.id)">
+                    {{ $t("Orders.reply") }}
+                  </button>
                 </div>
               </li>
             </ul>
@@ -76,15 +40,17 @@
                 <img :src="item.user.headimg" alt="" />
                 <div class="info">
                   <span class="name">{{ item.user.name }}</span>
-                  <div class="goods ellipsis">商品：{{ item.goods.name }}</div>
+                  <div class="goods ellipsis">
+                    {{ $t("Orders.goods") }}：{{ item.goods.name }}
+                  </div>
                   <p>{{ item.content }}</p>
                   <p class="replyContent">
-                    {{ "回复内容：" + item.replyContent }}
+                    {{ $t("Orders.response") + "：" + item.replyContent }}
                   </p>
                 </div>
                 <div class="operate">
                   <div>{{ item.time }}</div>
-                  <span>已回复</span>
+                  <span>{{ $t("Orders.replied") }}</span>
                 </div>
               </li>
             </ul>
@@ -96,15 +62,19 @@
       </el-tab-pane>
     </el-tabs>
 
-    <Popup title="回复留言" @popupClose="closePopup" v-show="popupShow">
+    <Popup
+      :title="$t('Orders.Message-reply')"
+      @popupClose="closePopup"
+      v-show="popupShow"
+    >
       <div class="popupContent" slot="popupContent">
         <textarea
           ref="replyText"
           cols="30"
           rows="10"
-          placeholder="请输入回复内容"
+          :placeholder="$t('Orders.response')"
         ></textarea>
-        <button @click="replyConfirm">确认</button>
+        <button @click="replyConfirm">{{ $t("public.confirm") }}</button>
       </div>
     </Popup>
   </div>
@@ -126,7 +96,7 @@ export default {
     return {
       loading: false,
       activeName: 0,
-      tags: ["未回复", "已回复"],
+      tags: [this.$t("Orders.noReply"), this.$t("Orders.replied")],
       noReplyMsgList: [],
       repliedMsgList: [],
       curIndex: 0,

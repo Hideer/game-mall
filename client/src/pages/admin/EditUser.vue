@@ -1,49 +1,5 @@
 <template>
   <div class="EditUser container-box-public">
-    <!-- <header class="clear">
-      <span>用户管理</span>
-      <div>
-        <input ref="input" type="text" placeholder="输入搜索用户" /><button
-          @click="searchUser"
-        >
-          <i class="iconfont icon-search" />
-        </button>
-      </div>
-    </header>
-    <table className="userTable">
-      <thead>
-        <tr>
-          <th>用户ID</th>
-          <th>email</th>
-          <th>昵称</th>
-          <th>性别</th>
-          <th>收件人</th>
-          <th>收货地址</th>
-          <th>联系电话</th>
-          <th>操作</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, index) in userList" :key="'user' + item.id">
-          <td>{{ item.id }}</td>
-          <td>{{ item.email }}</td>
-          <td>{{ item.nickname }}</td>
-          <td>{{ item.sex }}</td>
-          <td>{{ item.recipient }}</td>
-          <td>{{ item.address }}</td>
-          <td>{{ item.phone }}</td>
-          <td>
-            <button class="delete" @click="deleteUser(item.id)">删除</button>
-          </td>
-        </tr>
-      </tbody>
-    </table> -->
-    <!-- :data="
-        tableData.filter(
-          data =>
-            !search || data.name.toLowerCase().includes(search.toLowerCase())
-        )
-      " -->
     <div style="padding:20px;" class="box-shadow-public">
       <el-table
         class="table-box-pullic"
@@ -51,55 +7,80 @@
         style="width: 100%"
         stripe
       >
-        <el-table-column show-overflow-tooltip label="用户ID" prop="id">
+        <el-table-column
+          show-overflow-tooltip
+          :label="$t('Member.UserID')"
+          prop="id"
+        >
         </el-table-column>
-        <el-table-column show-overflow-tooltip label="email" prop="email">
+        <el-table-column
+          show-overflow-tooltip
+          :label="$t('Member.Email')"
+          prop="email"
+        >
         </el-table-column>
-        <el-table-column show-overflow-tooltip label="昵称" prop="nickname">
+        <el-table-column
+          show-overflow-tooltip
+          :label="$t('Member.Niickname')"
+          prop="nickname"
+        >
         </el-table-column>
         <!-- <el-table-column show-overflow-tooltip label="性别" prop="sex">
         </el-table-column> -->
-        <el-table-column show-overflow-tooltip label="收件人" prop="recipient">
+        <el-table-column
+          show-overflow-tooltip
+          :label="$t('Member.Recipient')"
+          prop="recipient"
+        >
         </el-table-column>
-        <el-table-column show-overflow-tooltip label="收货地址" prop="address">
+        <el-table-column
+          show-overflow-tooltip
+          :label="$t('Member.Address')"
+          prop="address"
+        >
         </el-table-column>
-        <el-table-column show-overflow-tooltip label="联系电话" prop="phone">
+        <el-table-column
+          show-overflow-tooltip
+          :label="$t('Member.Phone')"
+          prop="phone"
+        >
         </el-table-column>
         <el-table-column fixed="right" align="right" width="240">
           <template slot="header" slot-scope="scope">
             <el-input
               v-model="search"
               @keyup.enter.native="searchUser"
-              placeholder="输入关键字搜索"
+              placeholder="Please enter search keyword"
             >
-              <!-- <el-button
-              slot="append"
-              icon="el-icon-search"
-              @click="searchUser"
-            ></el-button> -->
             </el-input>
           </template>
           <template slot-scope="scope">
-            <el-button @click="editUser(scope.row)">修改</el-button>
-            <el-button type="danger" @click="deleteUser(scope.row.id)"
-              >删除</el-button
-            >
+            <el-button @click="editUser(scope.row)">{{
+              $t("public.modify")
+            }}</el-button>
+            <el-button type="danger" @click="deleteUser(scope.row.id)">{{
+              $t("public.delete")
+            }}</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
 
     <!-- user edit -->
-    <el-dialog title="会员信息" :visible.sync="editUserFormVisible" width="400px">
+    <el-dialog
+      :title="$t('public.MemberInfo')"
+      :visible.sync="editUserFormVisible"
+      width="400px"
+    >
       <el-form :model="editUserForm">
-        <el-form-item label="会员账号">
+        <el-form-item :label="$t('public.Email')">
           <el-input
             disabled
             v-model="editUserForm.email"
             autocomplete="off"
           ></el-input>
         </el-form-item>
-        <el-form-item label="称呢">
+        <el-form-item :label="$t('public.Niickname')">
           <el-input
             v-model="editUserForm.nickname"
             autocomplete="off"
@@ -108,19 +89,19 @@
         <!-- <el-form-item label="性别">
           <el-input v-model="editUserForm.sex" autocomplete="off"></el-input>
         </el-form-item> -->
-        <el-form-item label="收件人">
+        <el-form-item :label="$t('public.Recipient')">
           <el-input
             v-model="editUserForm.recipient"
             autocomplete="off"
           ></el-input>
         </el-form-item>
-        <el-form-item label="收货地址">
+        <el-form-item :label="$t('public.Address')">
           <el-input
             v-model="editUserForm.address"
             autocomplete="off"
           ></el-input>
         </el-form-item>
-        <el-form-item label="联系电话">
+        <el-form-item :label="$t('public.Phone')">
           <el-input
             v-model="editUserForm.phone"
             type="number"
@@ -129,8 +110,12 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="editUserFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="onEdit">修 改</el-button>
+        <el-button @click="editUserFormVisible = false">{{
+          $t("public.cancel")
+        }}</el-button>
+        <el-button type="primary" @click="onEdit">{{
+          $t("public.confirm")
+        }}</el-button>
       </div>
     </el-dialog>
   </div>

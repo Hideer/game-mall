@@ -2,57 +2,65 @@
   <div class="MyData">
     <ul>
       <li>
-        <span>用户头像</span>
+        <span>{{ $t("user.headimg") }}</span>
         <img :src="headimg" alt="headimg" />
       </li>
       <li>
-        <span>账号</span>
+        <span>{{ $t("user.account") }}</span>
         <p>{{ email }}</p>
       </li>
       <li>
-        <span>昵称</span>
+        <span>{{ $t("user.nickname") }}</span>
         <input type="text" v-model="nickname" />
       </li>
       <li>
-        <span>收件人</span>
+        <span>{{ $t("user.recipient") }}</span>
         <input type="text" v-model="recipient" />
       </li>
       <li>
-        <span>收件地址</span>
+        <span>{{ $t("user.address") }}</span>
         <input type="text" class="long" v-model="address" />
       </li>
       <li>
-        <span>联系电话</span>
+        <span>{{ $t("user.phone") }}</span>
         <input type="text" v-model="phone" />
       </li>
       <li>
-        <span>密码</span>
-        <button @click="showPopup">修改密码</button>
+        <span>{{ $t("user.pwd") }}</span>
+        <button @click="showPopup">
+          {{ $t("public.modify") }}
+        </button>
       </li>
     </ul>
-    <button @click="updateUserData" class="saveBtn">保存</button>
-    <Popup title="修改密码" @popupClose="closePopup" v-show="popupShow">
+    <button @click="updateUserData" class="saveBtn">
+      {{ $t("public.save") }}
+    </button>
+    <Popup
+      :title="$t('user.modifyPwd')"
+      @popupClose="closePopup"
+      v-show="popupShow"
+    >
       <div class="popupContent" slot="popupContent">
         <input
           type="password"
           style="height:30px"
           v-model="oldPwd"
-          placeholder="请输入原密码"
+          placeholder="Please enter the original password"
         />
         <input
           type="password"
           style="height:30px"
           v-model="newPwd"
-          placeholder="请输入新密码"
+          placeholder="Please enter your new password"
         />
         <input
           type="password"
           style="height:30px"
           v-model="confirmPwd"
-          placeholder="请再次输入新密码"
+          placeholder="Please enter a new password again"
         />
         <button @click="updatePwd" style="height:30px;line-height: 30px;">
-          确认修改
+          {{ $t("public.confirm") }}
         </button>
       </div>
     </Popup>

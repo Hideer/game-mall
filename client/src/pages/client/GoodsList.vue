@@ -1,5 +1,5 @@
 <template>
-  <div class="GoodsList">
+  <div class="GoodsList container-wrapper-public">
     <div class="sortBox">
       <span class="title">排序：</span>
       <span :class="['normal',{selected:sortMode===0}]" @click="changeSortMode(0)">默认</span>

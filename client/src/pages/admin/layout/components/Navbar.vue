@@ -24,14 +24,21 @@
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <router-link to="/">
             <el-dropdown-item>
-              首页
+              {{ $t("layout.表盘") }}
             </el-dropdown-item>
           </router-link>
           <router-link to="/system/editAdmin">
-            <el-dropdown-item>修改资料</el-dropdown-item>
+            <el-dropdown-item>{{ $t("layout.修改资料") }}</el-dropdown-item>
           </router-link>
           <el-dropdown-item divided>
-            <span style="display:block;" @click="logout">登出</span>
+            <span style="display:block;" @click="onChangeLanguage">{{
+              language
+            }}</span>
+          </el-dropdown-item>
+          <el-dropdown-item divided>
+            <span style="display:block;" @click="logout">{{
+              $t("layout.登出")
+            }}</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -43,6 +50,7 @@
 import { mapGetters, mapState, mapMutations } from "vuex";
 import Breadcrumb from "./Breadcrumb";
 import Hamburger from "./Hamburger";
+import { setup as languageSetup } from "@/locales/admin";
 
 export default {
   components: {
@@ -50,7 +58,7 @@ export default {
     Hamburger
   },
   computed: {
-    ...mapGetters(["sidebar", "adminName"])
+    ...mapGetters(["sidebar", "adminName", "language"])
   },
   methods: {
     ...mapMutations({
@@ -62,6 +70,14 @@ export default {
     async logout() {
       await this.adminLogout();
       this.$router.push(`/login?redirect=${this.$route.fullPath}`);
+    },
+    onChangeLanguage() {
+      console.log(123123);
+      languageSetup(this.language == "zh" ? "en" : "zh");
+      this.$store.dispatch(
+        "app/changeLanguage",
+        this.language == "zh" ? "en" : "zh"
+      );
     }
   }
 };
@@ -125,8 +141,9 @@ export default {
       .avatar-wrapper {
         // margin-top: 5px;
         position: relative;
-        .user-avatar,.user-name{
-          vertical-align: middle
+        .user-avatar,
+        .user-name {
+          vertical-align: middle;
         }
         .user-avatar {
           cursor: pointer;

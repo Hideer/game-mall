@@ -1,33 +1,5 @@
 <template>
   <div class="Orders container-box-public">
-    <!-- <header class="clear">
-  		<span>订单管理</span>
-  	</header>
-  	<Tag :tagList="tags" @indexChange="changeTag"/>
-  	<div class="content">
-  		<table class="ordersTable">
-	        <thead>
-	        	<tr><th>订单号</th><th>用户昵称</th><th>收件人</th><th>收货地址</th><th>联系电话</th><th>商品</th><th>规格</th><th>购买数量</th><th>金额</th><th>订单状态</th><th>更新时间</th><th>操作</th></tr>
-	        </thead>
-	        <tbody>
-	            <tr v-for="(item,index) in orderList" :key="'order'+item.id">
-	            	<td>{{item.id}}</td>
-	            	<td>{{item.user.nickname}}</td>
-	            	<td>{{item.user.name}}</td>
-	            	<td>{{item.user.address}}</td>
-	            	<td>{{item.user.phone}}</td>
-	            	<td>{{item.goods}}</td>
-	            	<td>{{item.spec}}</td>
-	            	<td>{{item.num}}</td>
-	            	<td>{{item.amount}}</td>
-	            	<td>{{item.state}}</td>
-	            	<td>{{item.time}}</td>
-	                <td><button class="normal" @click="editOrder(item.id)">编辑</button><button class="delete" @click="deleteOrder(item.id)">删除</button></td>
-	            </tr>
-	        </tbody>
-	    </table>
-  	</div> -->
-
     <el-tabs
       type="border-card"
       v-model="activeOrderModule"
@@ -46,12 +18,12 @@
           <el-table-column
             fixed
             show-overflow-tooltip
-            label="订单号"
+            :label="$t('Orders.goods-id')"
             prop="id"
             width="100"
           >
           </el-table-column>
-          <el-table-column fixed label="订单状态" prop="state">
+          <el-table-column fixed :label="$t('Orders.goods-state')" prop="state">
             <template slot-scope="scope">
               <el-tag
                 :type="
@@ -68,42 +40,41 @@
           </el-table-column>
           <el-table-column
             show-overflow-tooltip
-            label="用户昵称"
+            :label="$t('Member.Niickname')"
             prop="user.nickname"
           >
           </el-table-column>
           <el-table-column
             show-overflow-tooltip
-            label="收件人"
+            :label="$t('Member.Recipient')"
             prop="user.name"
           >
           </el-table-column>
           <el-table-column
             show-overflow-tooltip
-            label="收货地址"
+            :label="$t('Member.Address')"
             prop="user.address"
           >
           </el-table-column>
           <el-table-column
             show-overflow-tooltip
-            label="联系电话"
+            :label="$t('Member.Phone')"
             prop="user.phone"
           >
           </el-table-column>
-          <el-table-column show-overflow-tooltip label="商品" prop="goods">
+          <el-table-column show-overflow-tooltip :label="$t('Orders.goods')" prop="goods">
           </el-table-column>
-          <el-table-column show-overflow-tooltip label="规格" prop="spec">
+          <el-table-column show-overflow-tooltip :label="$t('Orders.goods-spec')"  prop="spec">
           </el-table-column>
-          <el-table-column show-overflow-tooltip label="购买数量" prop="num">
+          <el-table-column show-overflow-tooltip :label="$t('Orders.goods-num')"   prop="num">
           </el-table-column>
-          <el-table-column show-overflow-tooltip label="金额" prop="amount">
+          <el-table-column show-overflow-tooltip :label="$t('Orders.goods-amount')"  prop="amount">
           </el-table-column>
-
-          <el-table-column show-overflow-tooltip label="更新时间" prop="time">
+          <el-table-column show-overflow-tooltip :label="$t('Orders.update-time')"  prop="time">
           </el-table-column>
           <el-table-column fixed="right" align="right" width="240">
             <template slot="header" slot-scope="scope">
-              <el-input v-model="search" placeholder="输入关键字搜索">
+              <el-input v-model="search" placeholder="Please enter a search phrase">
                 <!-- @keyup.enter.native="searchUser" -->
                 <!-- <el-button
               slot="append"
@@ -143,19 +114,19 @@ export default {
       search: "",
       orderModule: [
         {
-          typeName: "全部"
+          typeName: i18n.t("Orders.All")
         },
         {
-          typeName: "未付款"
+          typeName: i18n.t("Orders.Non-pay")
         },
         {
-          typeName: "未发货"
+          typeName: i18n.t("Orders.Unshipped")
         },
         {
-          typeName: "已发货"
+          typeName: i18n.t("Orders.Shipped")
         },
         {
-          typeName: "已到货"
+          typeName: i18n.t("Orders.Received")
         }
       ]
     };
