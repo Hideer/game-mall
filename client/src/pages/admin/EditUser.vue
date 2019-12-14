@@ -68,19 +68,19 @@
 
     <!-- user edit -->
     <el-dialog
-      :title="$t('public.MemberInfo')"
+      :title="$t('Member.MemberInfo')"
       :visible.sync="editUserFormVisible"
       width="400px"
     >
       <el-form :model="editUserForm">
-        <el-form-item :label="$t('public.Email')">
+        <el-form-item :label="$t('Member.Email')">
           <el-input
             disabled
             v-model="editUserForm.email"
             autocomplete="off"
           ></el-input>
         </el-form-item>
-        <el-form-item :label="$t('public.Niickname')">
+        <el-form-item :label="$t('Member.Niickname')">
           <el-input
             v-model="editUserForm.nickname"
             autocomplete="off"
@@ -89,19 +89,19 @@
         <!-- <el-form-item label="性别">
           <el-input v-model="editUserForm.sex" autocomplete="off"></el-input>
         </el-form-item> -->
-        <el-form-item :label="$t('public.Recipient')">
+        <el-form-item :label="$t('Member.Recipient')">
           <el-input
             v-model="editUserForm.recipient"
             autocomplete="off"
           ></el-input>
         </el-form-item>
-        <el-form-item :label="$t('public.Address')">
+        <el-form-item :label="$t('Member.Address')">
           <el-input
             v-model="editUserForm.address"
             autocomplete="off"
           ></el-input>
         </el-form-item>
-        <el-form-item :label="$t('public.Phone')">
+        <el-form-item :label="$t('Member.Phone')">
           <el-input
             v-model="editUserForm.phone"
             type="number"

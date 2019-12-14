@@ -10,7 +10,7 @@
         <div class="right">
           <div class="searchBox">
             <el-input
-              placeholder="请输入商品关键字"
+              placeholder="Please enter the product keyword"
               v-model="searchText"
               class="search-item"
             >

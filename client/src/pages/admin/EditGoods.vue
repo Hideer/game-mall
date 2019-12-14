@@ -135,7 +135,7 @@ export default {
       },
       specList: [
         {
-          specName: "默认",
+          specName: "default",
           stockNum: 0,
           unitPrice: 0
         }

@@ -178,7 +178,7 @@
         <SectionHeader
           :title="item.name"
           tips=""
-          moreText="查看更多>"
+          moreText="To view more>"
           @click.native="selectType(item.id)"
         />
         <ul class="content">

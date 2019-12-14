@@ -83,7 +83,7 @@ exports.getOrders = async (req, res) => {
       })
     )
   } catch (e) {
-    console.log('这是个什么结构', e)
+    console.log(e)
     res.send(Util.returnMsg())
   }
 }
@@ -135,7 +135,7 @@ exports.getOrder = async (req, res) => {
       })
     )
   } catch (e) {
-    console.log('这是gege ', e)
+    console.log(e)
     res.send(Util.returnMsg())
   }
 }
@@ -180,6 +180,11 @@ exports.changeOrder = async (req, res) => {
       const goods = await GoodsModel.findOne({
         id: spec.goodsId
       })
+      console.log({
+        email: user.email,
+        nickname: user.nickname,
+        goods: goods.name
+      })
 
       email
         .postEmail({
@@ -192,6 +197,9 @@ exports.changeOrder = async (req, res) => {
             type: 'success',
             msg: '订单已发货，请注意邮箱查收激活码'
           })
+        })
+        .catch(e => {
+          console.log('邮件发送失败', e)
         })
     } else {
       socketio.messageOrder({
@@ -221,7 +229,6 @@ exports.deleteOrder = async (req, res) => {
         {
           id: id
         },
-
         {
           stockNum: goodsDetail.stockNum + order.goodsNum
         }

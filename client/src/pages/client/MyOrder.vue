@@ -46,7 +46,7 @@
               v-else-if="item.state === 2"
               @click="confirmReceive(item.id)"
             >
-              确认收货
+              confirm receipt
             </button>
             <button
               v-else-if="item.state === 3 && !item.hasComment"
@@ -54,21 +54,21 @@
                 showPopup(item.id, item.goods.id, item.goods.goodsDetailId)
               "
             >
-              评价
+              evaluate
             </button>
             <span
               class="hasComment"
               v-else-if="item.state === 3 && item.hasComment"
-              >已评价</span
+              >Have evaluation</span
             >
           </div>
         </li>
       </ul>
     </div>
-    <Popup title="商品评价" @popupClose="closePopup" v-show="popupShow">
+    <Popup title="EVALUTE" @popupClose="closePopup" v-show="popupShow">
       <div class="popupContent" slot="popupContent">
         <div class="scoreBox">
-          <span class="tips">评分：</span>
+          <span class="tips">grade：</span>
           <i
             class="iconfont icon-collection_fill"
             v-for="(item, index) in 5"
@@ -83,9 +83,9 @@
           v-model="comment"
           cols="30"
           rows="10"
-          placeholder="请输入评论内容"
+          placeholder="Please enter comments"
         ></textarea>
-        <button @click="sendComment">发表</button>
+        <button @click="sendComment">Publish</button>
       </div>
     </Popup>
   </div>

@@ -50,7 +50,7 @@
         <div class="commentBody" v-if="curIndex === 0">
           <div v-if="commentList.length > 0">
             <div class="rateBox">
-              <span>好评率</span>
+              <span>Rate</span>
               <span class="rate">{{ rate + "%" }}</span>
             </div>
             <ul class="commentList">
@@ -79,7 +79,7 @@
         <div class="msgBody" v-else>
           <div class="inputBox">
             <textarea
-              placeholder="请输入提问内容"
+              placeholder="Please enter questions"
               v-model="askContent"
               cols="30"
               rows="10"
