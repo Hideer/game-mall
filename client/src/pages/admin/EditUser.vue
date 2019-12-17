@@ -27,7 +27,7 @@
         </el-table-column>
         <!-- <el-table-column show-overflow-tooltip label="性别" prop="sex">
         </el-table-column> -->
-        <el-table-column
+        <!-- <el-table-column
           show-overflow-tooltip
           :label="$t('Member.Recipient')"
           prop="recipient"
@@ -38,7 +38,7 @@
           :label="$t('Member.Address')"
           prop="address"
         >
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           show-overflow-tooltip
           :label="$t('Member.Phone')"
@@ -89,7 +89,7 @@
         <!-- <el-form-item label="性别">
           <el-input v-model="editUserForm.sex" autocomplete="off"></el-input>
         </el-form-item> -->
-        <el-form-item :label="$t('Member.Recipient')">
+        <!-- <el-form-item :label="$t('Member.Recipient')">
           <el-input
             v-model="editUserForm.recipient"
             autocomplete="off"
@@ -100,7 +100,7 @@
             v-model="editUserForm.address"
             autocomplete="off"
           ></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item :label="$t('Member.Phone')">
           <el-input
             v-model="editUserForm.phone"
@@ -158,16 +158,16 @@ export default {
         });
     },
     deleteUser(id) {
-      this.$confirm("此操作将永久删除该会员, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
+      this.$confirm("This action will permanently delete the member. Do you want to continue?", "Info", {
+        confirmButtonText: "confirm",
+        cancelButtonText: "cancel",
         type: "warning"
       })
         .then(() => {
           const res = deleteUser(id);
           res
             .then(() => {
-              this.$message.success("删除成功");
+              this.$message.success("Delete the success!");
               this.userList.map((item, index) => {
                 if (item.id === id) {
                   this.userList.splice(index, 1);
@@ -181,7 +181,7 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "undeleted!"
           });
         });
     },
@@ -197,7 +197,7 @@ export default {
       })
         .then(data => {
           this.editUserFormVisible = false;
-          this.$message.success("修改成功");
+          this.$message.success("modify successfully！");
           this.init();
         })
         .catch(e => {

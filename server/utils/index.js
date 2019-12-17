@@ -6,12 +6,12 @@ function addSalt(key, salt) {
 }
 
 // err + message
-function returnMsg(msg = '系统异常') {
+function returnMsg(msg = 'System exception' || '系统异常') {
   return { code: 10000, message: msg }
 }
 
 // success
-function returnSuccess({ data = [], msg = '请求成功', extData = {} } = {}) {
+function returnSuccess({ data = [], msg = 'Request is successful' || '请求成功', extData = {} } = {}) {
   return { code: 0, message: msg, data, ...extData }
 }
 

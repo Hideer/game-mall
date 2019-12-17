@@ -56,10 +56,18 @@
         <NoData />
       </template>
     </el-tabs>
-    <Popup :title="$t('Goods.addGoodType')" @popupClose="closePopup" v-show="popupShow">
+    <Popup
+      :title="$t('Goods.addGoodType')"
+      @popupClose="closePopup"
+      v-show="popupShow"
+    >
       <div class="popupContent" slot="popupContent">
-        <input type="text" ref="typeInput" :placeholder="$t('Goods.请输入类目名称')" />
-        <button @click="addConfirm">{{ $t('public.confirm') }}</button>
+        <input
+          type="text"
+          ref="typeInput"
+          :placeholder="$t('Goods.请输入类目名称')"
+        />
+        <button @click="addConfirm">{{ $t("public.confirm") }}</button>
       </div>
     </Popup>
   </div>
@@ -131,9 +139,9 @@ export default {
       });
       res
         .then(() => {
-          this.$message.success("添加成功!");
-          this.getTypes();
+          this.$message.success("Add a success!");
           this.closePopup();
+          this.getTypes();
         })
         .catch(e => {
           console.log(e);

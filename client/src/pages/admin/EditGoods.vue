@@ -4,13 +4,13 @@
       <el-form-item :label="$t('Goods.GoodsName')">
         <el-input
           v-model="goodsForm.goodsName"
-          placeholder="请输入商品名称"
+          :placeholder="$t('Goods.请输入商品名称')"
           maxlength="20"
           show-word-limit
         ></el-input>
       </el-form-item>
       <el-form-item :label="$t('Goods.TemType')">
-        <el-select v-model="goodsForm.temTypeId" placeholder="请选择类别">
+        <el-select v-model="goodsForm.temTypeId" :placeholder="$t('Goods.请选择类别')">
           <el-option
             v-for="item in types"
             :key="item.id"
@@ -22,11 +22,10 @@
       <el-form-item :label="$t('Goods.GoodsImg')">
         <el-input
           v-model="goodsForm.goodsImg"
-          placeholder="请输入图片地址"
+          :placeholder="$t('Goods.请输入图片地址')"
         ></el-input>
       </el-form-item>
       <el-form-item :label="$t('Goods.SpecDetail')">
-        <!-- <el-input v-model="goodsForm.goodsImg" placeholder="请输入图片地址"></el-input> -->
         <ul class="speclist-content">
           <li v-for="(item, index) in specList" :key="index">
             <el-input
@@ -36,11 +35,13 @@
               maxlength="12"
               show-word-limit
             ></el-input>
+
             <span>{{ $t("Goods.Inventory") }}</span>
             <el-input-number
               v-model.trim.number="item.stockNum"
               :min="1"
             ></el-input-number>
+
             <span>{{ $t("Goods.price") }}</span>
             <el-input-number
               v-model.trim.number="item.unitPrice"
@@ -66,9 +67,9 @@
         <el-input
           type="textarea"
           v-model="goodsForm.desc"
-          placeholder="请输入简单描述"
-          rows="4"
-          maxlength="100"
+          :placeholder="$t('Goods.请输入简单描述')"
+          rows="6"
+          maxlength="600"
           show-word-limit
         ></el-input>
       </el-form-item>
@@ -107,7 +108,7 @@
 </template>
 
 <script>
-import Popup from "../../components/Popup";
+import Popup from "@/components/Popup";
 import {
   getTypes,
   getGoodsInfo,
@@ -115,7 +116,7 @@ import {
   addSpec,
   deleteSpec,
   updateGoods
-} from "../../api/admin";
+} from "@/api/admin";
 export default {
   name: "EditGoods",
   components: {
@@ -188,7 +189,7 @@ export default {
         });
         res
           .then(() => {
-            this.$message.success("创建商品成功！");
+            this.$message.success("Create merchandise successfully!");
           })
           .catch(e => {
             console.log(e);
@@ -204,7 +205,7 @@ export default {
         });
         res
           .then(() => {
-            this.$message.success("修改成功！");
+            this.$message.success("Successful modification!");
           })
           .catch(e => {
             console.log(e);

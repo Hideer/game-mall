@@ -34,7 +34,7 @@
           type="password"
           :placeholder="$t('system.请输入密码')"
         />
-        <input
+        <!-- <input
           ref="signRecipient"
           type="text"
           :placeholder="$t('system.请输入收件人姓名')"
@@ -43,7 +43,7 @@
           ref="signAddress"
           type="text"
           :placeholder="$t('system.请输入收件地址')"
-        />
+        /> -->
         <input
           ref="signPhone"
           type="text"
@@ -58,7 +58,9 @@
 <script>
 import { mapMutations } from "vuex";
 import { getClientSize } from "../../util/util";
-import { login, signup } from "../../api/client";
+import { login, signup } from "@/api/client";
+import { isEmpty } from "@/utils";
+import { validateEmail, validatePhone } from "@/utils/validate";
 
 export default {
   name: "ClientLogin",
@@ -104,12 +106,32 @@ export default {
         });
     },
     signup() {
+      if (
+        isEmpty(this.$refs.signEmail.value) ||
+        isEmpty(this.$refs.signName.value) ||
+        isEmpty(this.$refs.signPwd.value) ||
+        isEmpty(this.$refs.signPhone.value)
+      ) {
+        this.$message.info("Please enter content in the input field");
+        return;
+      }
+
+      if (!validateEmail(this.$refs.signEmail.value)) {
+        this.$message.info("Please enter the correct email address");
+        return;
+      }
+
+      if (!validatePhone(this.$refs.signPhone.value)) {
+        this.$message.info("Please enter the correct phone number");
+        return;
+      }
+
       const res = signup({
         email: this.$refs.signEmail.value,
         nickname: this.$refs.signName.value,
         pwd: this.$refs.signPwd.value,
-        recipient: this.$refs.signRecipient.value,
-        address: this.$refs.signAddress.value,
+        // recipient: this.$refs.signRecipient.value,
+        // address: this.$refs.signAddress.value,
         phone: this.$refs.signPhone.value
       });
       res

@@ -11,8 +11,12 @@
         <el-input v-model="modifyAdminForm.confirmPwd" show-password></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="confirmChange">{{ $t('public.confirm') }}</el-button>
-        <el-button @click="resetForm('modifyAdminForm')">{{ $t('public.reset') }}</el-button>
+        <el-button type="primary" @click="confirmChange">{{
+          $t("public.confirm")
+        }}</el-button>
+        <el-button @click="resetForm('modifyAdminForm')">{{
+          $t("public.reset")
+        }}</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -49,11 +53,11 @@ export default {
       });
       res
         .then(() => {
-          this.$message.success("修改成功！");
+          this.$message.success("Successful modification!");
           this.resetForm("modifyAdminForm");
         })
         .catch(e => {
-          this.$message.error(e)
+          this.$message.error(e);
         });
     }
   }

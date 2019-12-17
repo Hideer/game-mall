@@ -36,6 +36,7 @@ npm run dev:admin
   - socket.io
   - nodemon
   - mysql
+  - nodemailer // 基于node的邮件推送功能
   - ...
 
 ## 部署说明

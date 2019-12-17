@@ -13,14 +13,14 @@
         <span>{{ $t("user.nickname") }}</span>
         <input type="text" v-model="nickname" />
       </li>
-      <li>
+      <!-- <li>
         <span>{{ $t("user.recipient") }}</span>
         <input type="text" v-model="recipient" />
       </li>
       <li>
         <span>{{ $t("user.address") }}</span>
         <input type="text" class="long" v-model="address" />
-      </li>
+      </li> -->
       <li>
         <span>{{ $t("user.phone") }}</span>
         <input type="text" v-model="phone" />
@@ -110,7 +110,7 @@ export default {
       });
       res
         .then(() => {
-          this.$message.success("修改成功");
+          this.$message.success("Modify the success！");
           this.setClientName(this.nickname);
         })
         .catch(e => {
@@ -125,7 +125,7 @@ export default {
     },
     updatePwd() {
       if (this.newPwd !== this.confirmPwd) {
-        this.$message.info("两次输入的密码不一致！");
+        this.$message.info("The two passwords are not the same!");
         return;
       }
       const res = updatePwd({
@@ -140,7 +140,7 @@ export default {
           this.newPwd = "";
           this.confirmPwd = "";
           this.closePopup();
-          this.$message.success("修改密码成功");
+          this.$message.success("Password change successful！");
         })
         .catch(e => {
           this.$message.error(e);

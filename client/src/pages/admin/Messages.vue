@@ -158,7 +158,7 @@ export default {
       });
       res
         .then(() => {
-          this.$message.success("回复成功!");
+          this.$message.success("Reply to success!");
           this.noReplyMsgList.map((item, index) => {
             if (item.id === this.curMsgId) {
               this.noReplyMsgList.splice(index, 1);

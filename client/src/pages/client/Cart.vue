@@ -98,7 +98,7 @@ export default {
       const res = deleteOrder(orderId);
       res
         .then(() => {
-          this.$message.success("删除订单成功！");
+          this.$message.success("Order deleted successfully!");
           this.orderList.map((item, index) => {
             if (item.id === orderId) {
               this.orderList.splice(index, 1);
@@ -126,7 +126,7 @@ export default {
       });
       res
         .then(() => {
-          this.$message.success("下单成功！");
+          this.$message.success("Order successful!");
           this.orderList = [];
         })
         .catch(e => {

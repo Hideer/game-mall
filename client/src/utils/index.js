@@ -1,8 +1,8 @@
 /**
  * @Author: yu_meng_cheng@163.com
  * @Date: 2019-12-12 23:11:51
- * @Last Modified by:   yu_meng_cheng@163.com
- * @Last Modified time: 2019-12-12 23:11:51
+ * @Last Modified by: yu_meng_cheng@163.com
+ * @Last Modified time: 2019-12-17 11:10:34
  */
 
 
@@ -108,4 +108,34 @@ export function param2Obj(url) {
         .replace(/\+/g, ' ') +
       '"}'
   )
+}
+
+
+/**
+ * 检查数据是否为空
+ * @param obj
+ * @returns {boolean}
+ */
+export function isEmpty(v) {
+  switch (typeof v) {
+    case 'undefined':
+      return true
+    case 'string':
+      // .replace(/(^s*)|(s*$)/g, '').length == 0
+      if (v.replace(/(^[ \t\n\r]*)|([ \t\n\r]*$)/g, '').length == 0) return true
+      break
+    case 'boolean':
+      if (!v) return true
+      break
+    // case 'number':
+    //   if (0 === v || isNaN(v)) return true;
+    //   break;
+    case 'object':
+      if (null === v || v.length === 0) return true
+      for (var i in v) {
+        return false
+      }
+      return true
+  }
+  return false
 }

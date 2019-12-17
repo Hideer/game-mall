@@ -106,7 +106,7 @@ export default {
         this.typeList = data;
       })
       .catch(e => {
-        this.$message.error("输入不能为空！");
+        this.$message.error("Input cannot be empty!");
       });
 
     //监听滚动事件

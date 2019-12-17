@@ -117,7 +117,7 @@ export default {
       });
       res
         .then(() => {
-          this.$message.success("修改成功");
+          this.$message.success("Modify the success!");
           this.fetchOrderDetail(this.$route.params.id);
           this.back();
         })

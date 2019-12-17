@@ -25,7 +25,7 @@ exports.signup = async (req, res) => {
     })
     //如果已经存在
     if (emailUniq) {
-      res.send(Util.returnMsg('该邮箱已被注册'))
+      res.send(Util.returnMsg('The mailbox has been registered' || '该邮箱已被注册'))
       return
     }
 
@@ -35,7 +35,7 @@ exports.signup = async (req, res) => {
     })
     //如果已经存在
     if (nicknameUniq) {
-      res.send(Util.returnMsg('该昵称已被注册'))
+      res.send(Util.returnMsg('The nickname has been registered' || '该昵称已被注册'))
       return
     }
 
@@ -68,14 +68,14 @@ exports.login = async (req, res) => {
 
     //如果不存在
     if (!emailSigned) {
-      res.send(Util.returnMsg('该邮箱还没注册，请前往注册'))
+      res.send(Util.returnMsg('This email address has not been registered, please go to register' || '该邮箱还没注册，请前往注册'))
       return
     }
     //已经存在
     else {
       //密码不对
       if (!bcrypt.compareSync(user.pwd, emailSigned.pwd)) {
-        res.send(Util.returnMsg('密码不正确'))
+        res.send(Util.returnMsg('Incorrect password' || '密码不正确'))
         return
       }
       //密码正确
@@ -105,7 +105,7 @@ exports.getData = async (req, res) => {
       id: id
     })
     if (!user) {
-      res.send(Util.returnMsg('该用户不存在'))
+      res.send(Util.returnMsg('The user does not exist' || '该用户不存在'))
       return
     }
     res.send(
@@ -150,7 +150,7 @@ exports.updateUserData = async (req, res) => {
     )
   } catch (e) {
     //发生错误
-    console.log(e);
+    console.log(e)
     res.send(Util.returnMsg())
   }
 }
@@ -164,7 +164,7 @@ exports.updatePwd = async (req, res) => {
     })
 
     if (!bcrypt.compareSync(data.oldPwd, account.pwd)) {
-      res.send(Util.returnMsg('密码不正确'))
+      res.send(Util.returnMsg('Incorrect password' || '密码不正确'))
       return
     }
     //密码正确
@@ -179,11 +179,11 @@ exports.updatePwd = async (req, res) => {
         }
       )
       //正常修改
-      res.send(Util.returnSuccess({msg:'修改密码成功！'}))
+      res.send(Util.returnSuccess({ msg: 'Password change successful!' || '修改密码成功！' }))
     }
   } catch (e) {
     //发生错误
     console.log(e)
-    res.send(Util.returnMsg('修改密码出错'))
+    res.send(Util.returnMsg( 'Error modifying password' || '修改密码出错'))
   }
 }

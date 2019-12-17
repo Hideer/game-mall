@@ -195,7 +195,7 @@ exports.changeOrder = async (req, res) => {
         .then(() => {
           socketio.messageOrder({
             type: 'success',
-            msg: '订单已发货，请注意邮箱查收激活码'
+            msg: 'The order has been shipped, please check the activation code in the email'
           })
         })
         .catch(e => {
@@ -204,7 +204,7 @@ exports.changeOrder = async (req, res) => {
     } else {
       socketio.messageOrder({
         type: 'info',
-        msg: '订单状态已变更请注意查收'
+        msg: 'Please note that the order status has been changed'
       })
     }
   } catch (e) {
@@ -225,7 +225,7 @@ exports.deleteOrder = async (req, res) => {
       const goodsDetail = await GoodsDetailModel.findOne({
         id: id
       })
-      await GoodsDetailModel.findOneAndUpdate(
+      goodsDetail && await GoodsDetailModel.findOneAndUpdate(
         {
           id: id
         },

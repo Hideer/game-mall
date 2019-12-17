@@ -153,7 +153,7 @@ export default {
       const res = deleteOrder(orderId);
       res
         .then(() => {
-          this.$message.info("删除订单成功！");
+          this.$message.info("Order deleted successfully!");
           this.orderList.map((item, index) => {
             if (item.id === orderId) {
               this.orderList.splice(index, 1);
@@ -169,7 +169,7 @@ export default {
       const res = pay(orderId);
       res
         .then(() => {
-          this.$message.success("支付成功！");
+          this.$message.success("Payment successful!");
           this.orderList.map((item, index) => {
             if (item.id === orderId) {
               item.state = 1;
@@ -184,7 +184,7 @@ export default {
       const res = confirmReceive(orderId);
       res
         .then(() => {
-          this.$message.info("确认收货成功！");
+          this.$message.info("Confirm successful receipt!");
           this.orderList.map((item, index) => {
             if (item.id === orderId) {
               item.state = 3;
@@ -213,7 +213,7 @@ export default {
     },
     sendComment() {
       if (this.curStar <= 0 || this.comment == "") {
-        this.$message.info("评分和评价不能为空！");
+        this.$message.info("Ratings and evaluations cannot be empty!");
         return;
       }
       const res = sendComment({
@@ -226,7 +226,7 @@ export default {
       });
       res
         .then(() => {
-          this.$message.success("评价成功！");
+          this.$message.success("Evaluate success!");
           for (let order of this.orderList) {
             if (order.id === this.curOrderId) {
               order.hasComment = true;
@@ -257,7 +257,7 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import "../../assets/css/var.less";
+@import "~@/assets/css/var.less";
 .MyOrder {
   .tagList {
     li {

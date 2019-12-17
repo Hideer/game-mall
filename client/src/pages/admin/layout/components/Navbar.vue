@@ -30,11 +30,11 @@
           <router-link to="/system/editAdmin">
             <el-dropdown-item>{{ $t("layout.修改资料") }}</el-dropdown-item>
           </router-link>
-          <el-dropdown-item divided>
+          <!-- <el-dropdown-item divided>
             <span style="display:block;" @click="onChangeLanguage">{{
               language
             }}</span>
-          </el-dropdown-item>
+          </el-dropdown-item> -->
           <el-dropdown-item divided>
             <span style="display:block;" @click="logout">{{
               $t("layout.登出")

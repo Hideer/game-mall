@@ -40,7 +40,7 @@
           </ul>
         </Slick>
       </section>
-      <section class="flashSale section">
+      <!-- <section class="flashSale section">
         <SectionHeader
           :title="$t('index.Time-to-buy')"
           :tips="$t('index.Time-to-buy-info')"
@@ -90,7 +90,7 @@
             </li>
           </ul>
         </div>
-      </section>
+      </section> -->
       <!-- 人气推荐 -->
       <!-- <section class="hotGoods section">
         <SectionHeader
@@ -120,7 +120,7 @@
           </ul>
         </div>
       </section> -->
-      <section class="maker section">
+      <!-- <section class="maker section">
         <SectionHeader
           :title="$t('index.bBrand-manufacturer')"
           :tips="$t('index.bBrand-manufacturer-info')"
@@ -168,7 +168,7 @@
             </ZoomImg>
           </div>
         </div>
-      </section>
+      </section> -->
       <section
         class="typeSection section"
         v-for="(item, index) in typeList.slice(1)"

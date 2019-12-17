@@ -185,7 +185,7 @@ exports.addOrder = async (req, res) => {
         id: req.body.goodsDetailId
       })
       let newNum = spec.stockNum - req.body.num
-      await GoodsDetailModel.findOneAndRemove(
+      await GoodsDetailModel.findOneAndUpdate(
         {
           id: req.body.goodsDetailId
         },

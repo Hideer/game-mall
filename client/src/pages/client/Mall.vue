@@ -10,7 +10,7 @@
         <div class="right">
           <div class="searchBox">
             <el-input
-              placeholder="Please enter the product keyword"
+              placeholder="Product keyword"
               v-model="searchText"
               class="search-item"
             >
@@ -162,10 +162,10 @@ export default {
     TipsInput
   },
   sockets: {
-    messageOrder: function({ type = "info", msg = "一个新的提醒" } = {}) {
+    messageOrder: function({ type = "info", msg = "A new reminder" } = {}) {
       this.$notify[type]({
-        title: "订单更新提醒",
-        // duration: 0,
+        title: "Order update reminder",
+        duration: 0,
         message: msg
       });
     }
@@ -192,7 +192,7 @@ export default {
     },
     searchConfirm() {
       if (this.searchText.trim().length <= 0) {
-        this.$message.warning("输入不能为空！");
+        this.$message.warning("Input cannot be empty!");
         return;
       }
       this.navTo(`/mall/show/goodsList/0/${this.searchText}`);

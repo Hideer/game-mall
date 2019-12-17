@@ -10,10 +10,10 @@ exports.register = async (req, res, next) => {
   try {
     const find_user = await AdminModel.find({ account: req.body.account })
     if (find_user && find_user.length) {
-      res.send(Util.returnMsg('用户已存在！'))
+      res.send(Util.returnMsg('The user already exists!' || '用户已存在！'))
     } else {
       await new AdminModel(req.body).save()
-      res.send(Util.returnSuccess({ msg: '注册成功！' }))
+      res.send(Util.returnSuccess({ msg: 'Registration successful!' || '注册成功！' }))
     }
   } catch (error) {
     console.log(error)
@@ -34,14 +34,19 @@ exports.login = async (req, res) => {
 
     //如果不存在
     if (!accountSigned) {
-      res.send(Util.returnMsg('该账号还没注册，请联系管理员注册'))
+      res.send(
+        Util.returnMsg(
+          'This account has not been registered, please contact the administrator to register' ||
+            '该账号还没注册，请联系管理员注册'
+        )
+      )
       return
     }
     //已经存在
     else {
       //密码不对
       if (accountSigned.pwd !== admin.pwd) {
-        res.send(Util.returnMsg('密码不正确'))
+        res.send(Util.returnMsg('Incorrect password' || '密码不正确'))
         return
       }
       //密码正确
@@ -49,7 +54,7 @@ exports.login = async (req, res) => {
         const token = jwt.sign(accountSigned.id, 'chambers')
         res.send(
           Util.returnSuccess({
-            msg: '登录成功！',
+            msg: 'Login successful! ' || ' 登录成功！',
             data: {
               token: token,
               name: accountSigned.name
@@ -73,7 +78,7 @@ exports.changePwd = async (req, res) => {
       id: pwdObj.adminToken
     })
     if (adminOldPwd.pwd !== pwdObj.oldPwd) {
-      res.send(Util.returnMsg('旧密码错误'))
+      res.send(Util.returnMsg('Old password error' || '旧密码错误'))
       return
     }
     await AdminModel.findOneAndUpdate(

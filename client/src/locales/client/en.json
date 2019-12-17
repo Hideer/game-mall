@@ -2,7 +2,7 @@
   "system": {
     "title": "LovePlay-mall",
     "info": "One-stop game platform",
-    "account": "account",
+    "account": "Email",
     "pwd": "pwd",
     "login": "Login",
     "register": "Register",
@@ -59,7 +59,7 @@
     "modifyPwd": "modifyPwd"
   },
   "goods": {
-    "specificae": "specificae",
+    "specificae": "spec",
     "number": "number",
     "residue": "residue"
   },

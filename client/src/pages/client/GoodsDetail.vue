@@ -14,8 +14,10 @@
             <h3 class="price">{{ "¥" + goodsPrice }}</h3>
           </div>
           <div class="infoBox">
-            <span>{{ $t("goods.specificae") }}：</span>
-            <Radio
+            <span style="margint-right:15px"
+              >{{ $t("goods.specificae") }}：</span
+            >
+            <!-- <Radio
               v-for="(item, index) in specs"
               :key="item.id"
               v-model="temSpecId"
@@ -24,13 +26,29 @@
               :radioVal="item.id"
             >
               <span class="tips" slot="tips">{{
-                item.specName + "剩余" + item.stockNum + "件"
+                item.specName + "(only leave" + item.stockNum + "/part)"
               }}</span>
-            </Radio>
+            </Radio> -->
+            <el-radio-group v-model="temSpecId">
+              <el-radio
+                v-for="(item, index) in specs"
+                :label="item.id"
+                :key="item.id"
+                border
+                >{{
+                  item.specName + "(only leave" + item.stockNum + "/part)"
+                }}</el-radio
+              >
+            </el-radio-group>
           </div>
           <div class="infoBox">
             <span>{{ $t("goods.number") }}：</span>
-            <NumberInput v-model="num" :min="1" :max="temStockNum" />
+            <!-- <NumberInput v-model="num" :min="1" :max="temStockNum" /> -->
+            <el-input-number
+              v-model="num"
+              :min="1"
+              :max="temStockNum"
+            ></el-input-number>
           </div>
           <button class="buyBtn" @click="buy">{{ $t("public.pay") }}</button>
           <button @click="addToCart">{{ $t("public.Add-to-cart") }}</button>
@@ -263,7 +281,7 @@ export default {
 
     addToCart() {
       if (!this.clientToken) {
-        this.$message.error("请先登录！");
+        this.$message.error("Please log in first!");
         return;
       }
       const res = addOrder({
@@ -275,7 +293,9 @@ export default {
       });
       res
         .then(() => {
-          this.$message.info("加入购物车成功！请前往 个人中心--购物车 结算");
+          this.$message.info(
+            "Add to cart successful! Please go to the personal center - shopping cart settlement"
+          );
         })
         .catch(e => {
           this.$message.error(e);
@@ -284,7 +304,7 @@ export default {
 
     buy() {
       if (!this.clientToken) {
-        this.$message.error("请先登录！");
+        this.$message.error("Please log in first!");
         return;
       }
       const res = addOrder({
@@ -296,7 +316,9 @@ export default {
       });
       res
         .then(() => {
-          this.$message.success("自动付款成功！请耐心等待包裹派送");
+          this.$message.success(
+            "Automatic payment successful! Please wait patiently for the parcel to be delivered!"
+          );
         })
         .catch(e => {
           this.$message.error(e);
@@ -350,6 +372,20 @@ export default {
 <style scoped lang="less">
 @import "../../assets/css/var.less";
 .GoodsDetail {
+  .el-radio.is-bordered.is-checked {
+    border-color: #b4a078;
+  }
+  /deep/.el-radio__input.is-checked + .el-radio__label {
+    color: #b4a078;
+  }
+  /deep/.el-radio__input.is-checked .el-radio__inner {
+    border-color: #b4a078;
+    background: #b4a078;
+  }
+  /deep/.el-input__inner:focus{
+    border-color: #b4a078;
+  }
+
   .content {
     width: 100%;
     padding-top: 20px;

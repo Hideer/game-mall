@@ -6,8 +6,9 @@
     <div class="content">
       <h3>{{ $t("login.title") }}</h3>
       <P
-        >{{ $t("login.systemInfo") }} |
-        <span @click="onChangeLanguage">{{ language }}</span>
+        >{{ $t("login.systemInfo") }}
+        <!-- |
+        <span @click="onChangeLanguage">{{ language }}</span> -->
       </P>
       <input ref="account" type="text" :placeholder="$t('login.account')" />
       <input ref="pwd" type="password" :placeholder="$t('login.pwd')" />
@@ -76,6 +77,7 @@ export default {
           this.$router.push({ path: this.redirect || "/" });
         })
         .catch(e => {
+          console.log(e);
           this.$message.error(e);
         });
     }

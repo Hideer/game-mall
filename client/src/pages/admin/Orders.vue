@@ -44,7 +44,7 @@
             prop="user.nickname"
           >
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             show-overflow-tooltip
             :label="$t('Member.Recipient')"
             prop="user.name"
@@ -55,7 +55,7 @@
             :label="$t('Member.Address')"
             prop="user.address"
           >
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
             show-overflow-tooltip
             :label="$t('Member.Phone')"
@@ -90,6 +90,7 @@
             show-overflow-tooltip
             :label="$t('Orders.update-time')"
             prop="time"
+            width="120"
           >
           </el-table-column>
           <el-table-column fixed="right" align="right" width="240">
@@ -161,7 +162,6 @@ export default {
       const res = getOrders(index - 1);
       res
         .then(orders => {
-          this.$message.success("获取成功");
           this.loading = false;
           this.orderList = orders;
         })
@@ -179,7 +179,7 @@ export default {
       res
         .then(() => {
           this.loading = false;
-          this.$message.success("删除成功!");
+          this.$message.success("Delete the success!");
           this.orderList.map((item, index) => {
             if (item.id === id) {
               this.orderList.splice(index, 1);
