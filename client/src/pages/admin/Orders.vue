@@ -108,10 +108,12 @@
               </el-input>
             </template>
             <template slot-scope="scope">
-              <el-button @click="editOrder(scope.row)">编辑</el-button>
-              <el-button type="danger" @click="deleteOrder(scope.row.id)"
-                >删除</el-button
-              >
+              <el-button @click="editOrder(scope.row)">{{
+                $t("public.edit")
+              }}</el-button>
+              <el-button type="danger" @click="deleteOrder(scope.row.id)">{{
+                $t("public.delete")
+              }}</el-button>
             </template>
           </el-table-column>
         </el-table>

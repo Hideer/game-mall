@@ -14,7 +14,6 @@ Vue.config.productionTip = false;
 import "element-ui/lib/theme-chalk/index.css";
 import ElementUI from "element-ui";
 Vue.use(ElementUI, { size: "mini", zIndex: 3000 });
-// socket 链接
 
 /* eslint-disable no-new */
 new Vue({
