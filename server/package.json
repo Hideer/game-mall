@@ -27,7 +27,7 @@
     "mongoose": "^5.8.0",
     "morgan": "^1.9.1",
     "mysql2": "^1.4.2",
-    "nodemailer": "^6.4.1",
+    "nodemailer": "^6.4.16",
     "nyc": "^14.1.1",
     "power-assert": "^1.6.1",
     "pug": "^2.0.0-rc.1",
